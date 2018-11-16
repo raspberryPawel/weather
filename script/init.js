@@ -6,7 +6,8 @@ $(document).ready(function () {
         $("#searchAutoComplete")
             .empty()
             .css("height", "0px");
-        let newSearch = repleacePolishLetters(sign, signUTF);
+        let toSearch = this.value;
+        let newSearch = repleacePolishLetters(sign, signUTF, toSearch);
 
         $.ajax({
             url: "php/AutoCompleteSearch.php",
@@ -61,7 +62,27 @@ $(document).ready(function () {
                 initMap(obj.GeoPosition.Latitude, obj.GeoPosition.Longitude);
                 var div = $("<div>")
                     .attr("id", "weatherInfo");
-                $("#map").append(div);
+                var hide = $("<div>")
+                    .attr("id", "hideWeather")
+                    .html("Ukryj pogodę <i class='fas fa-arrow-down'></i>")
+                    .on("click", function () {
+                        if ($("#hideWeather")[0].innerHTML == 'Ukryj pogodę <i class="fas fa-arrow-down"></i>') {
+                            $("#weatherInfo")
+                                .css("transition", "1s")
+                                .css("top", "120%");
+                            $("#hideWeather")
+                                .html('Pokaż pogodę <i class="fas fa-arrow-up"></i>')
+                        }
+                        else{
+                            $("#weatherInfo")
+                            .css("transition", "1s")
+                            .css("top", "0%");
+                        $("#hideWeather")
+                            .html("Ukryj pogodę <i class='fas fa-arrow-down'></i>")
+                        }
+
+                    });
+                $("#map").append(hide).append(div);
                 getWeather(toSearch);
             },
             error: function (xhr, status, error) {
@@ -71,8 +92,7 @@ $(document).ready(function () {
     }
 });
 
-function repleacePolishLetters(sign, signUTF) {
-    let toSearch = this.value;
+function repleacePolishLetters(sign, signUTF, toSearch) {
     toSearch = toSearch.toLowerCase();
     let newSearch = "";
     for (var i = 0; i < toSearch.length; i++) {
