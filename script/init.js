@@ -34,7 +34,7 @@ $(document).ready(function () {
                 var obj = JSON.parse(JSON.parse(data));
                 console.log("obj ", obj.Message);
                 if (obj.Message == "The allowed number of requests has been exceeded.") {
-                    console.log("chuj");
+                    console.log("wyczerpano liczbę użyć  klucza");
                 }
                 else {
                     var optionLength;
