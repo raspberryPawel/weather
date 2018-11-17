@@ -1,11 +1,12 @@
-function initMap(latitude, longitude) {
-    var myLatLng = { lat: latitude, lng: longitude };
-
+function initMap(latitude, longitude, zoomVal) {
+    //var myLatLng = { lat: latitude, lng: longitude };
+    var myLatLng = new google.maps.LatLng(parseFloat(latitude),parseFloat(longitude));
+    console.log("inicjuje mapę");
     // Create a map object and specify the DOM element
     // for display.
     var map = new google.maps.Map(document.getElementById('map'), {
         center: myLatLng,
-        zoom: 13,
+        zoom: zoomVal,
         styles: [
             {
                 "featureType": "all",

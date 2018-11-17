@@ -19,26 +19,41 @@ function getWeather(toSearch) {
         type: "POST",
         success: function (data) {
             var obj = JSON.parse(JSON.parse(data));
-            var order = 0;
-            for (var i = 0; i < 4; i++) {
-                if (todayIsDay + i > 6)
-                    var today = days[-2 + i];
-                else
-                    var today = days[todayIsDay + i];
+            if (obj.Message == "The allowed number of requests has been exceeded.") {
+                console.log("wyczerpano liczbę użyć  klucza");
+            }
+            else {
+                var order = 0;
+                for (var i = 0; i < 4; i++) {
+                    if (todayIsDay + i == 7) {
+                        var today = days[0];
+                    }
+                    else if (todayIsDay + i == 8) {
+                        var today = days[1];
+                    }
+                    else if (todayIsDay + i == 9) {
+                        var today = days[2];
+                    }
+                    else if (todayIsDay + i == 10) {
+                        var today = days[3];
+                    }
+                    else {
+                        var today = days[todayIsDay + i];
+                    }
+                    var t;
+                    var speed;
+                    let div;
+                    let day;
+                    ({ t, speed, div, day, order } = createDayElements(order, obj, i, today, dayVisible));
 
-                var t;
-                var speed;
-                let div;
-                let day;
-                ({ t, speed, div, day, order } = createDayElements(order, obj, i, today, dayVisible));
+                    var { t, speed, night } = createNightElement(t, obj, i, today, speed, nightVisible);
 
-                var { t, speed, night } = createNightElement(t, obj, i, today, speed, nightVisible);
-
-                div
-                    .append(day)
-                    .append(night);
-                $("#weatherInfo").append(div);
-                // + ", " + obj.DailyForecasts[i].Temperature.Maximum.Value + ", " + obj.DailyForecasts[i].Day.IconPhrase + ", " + obj.DailyForecasts[i].Night.IconPhrase            
+                    div
+                        .append(day)
+                        .append(night);
+                    $("#weatherInfo").append(div);
+                    // + ", " + obj.DailyForecasts[i].Temperature.Maximum.Value + ", " + obj.DailyForecasts[i].Day.IconPhrase + ", " + obj.DailyForecasts[i].Night.IconPhrase            
+                }
             }
         },
         error: function (xhr, status, error) {

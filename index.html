@@ -13,13 +13,18 @@
   <link rel="stylesheet" href="style/main.css">
   <!-- script -->
   <script src="script/jquery.js"></script>
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDaZwpc5qZXFmbTwGjjy41i-FuggEaJHF4&callback=initMap"
+    async defer></script>
   <script src="script/map.js"></script>
+  <script src="script/UI.js"></script>
   <script src="script/getWeather.js"></script>
   <script src="script/init.js"></script>
 
   <!-- font -->
+  <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
   <!-- icons -->
-  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU"
+    crossorigin="anonymous">
 </head>
 
 <body>
@@ -47,11 +52,64 @@
   </div>
   <div id="map">
   </div>
+  <nav>
+    <div id="menu-button">
+      <i class="fas fa-bars" style="display: block;"></i>
+      <i class="fas fa-times" style="display: none;"></i>
+    </div>
+    <ul>
+      <li>
+        <a id="sigIn" href="#">Zaloguj</a>
+      </li>
+      <li>
+        <a id="register" href="#skill">Zarejestruj</a>
+      </li>
+      <li>
+        <a href="#project">Projekty</a>
+      </li>
+      <li>
+        <a href="#contact">Kontakt</a>
+      </li>
+    </ul>
+  </nav>
+  <div id="login">
+    <i id="loginCancel" class="fas fa-times" style="display: block;"></i>
+    <div class="container">
+      <form id="Login">
+        <div class="form-group">
+          <input type="email" class="form-control" id="inputEmail" placeholder="Adres Email">
+        </div>
+        <div class="form-group">
+          <input type="password" class="form-control" id="inputPassword" placeholder="Hasło">
+        </div>
+        <div class="forgot">
+          <a href="reset.html">Forgot password?</a>
+        </div>
+        <button type="submit" class="btn btn-primary">Zaloguj</button>
+      </form>
+    </div>
+  </div>
 
-  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDaZwpc5qZXFmbTwGjjy41i-FuggEaJHF4&callback=initMap"
-    async defer></script>
-
-
+  <div id="registerForm">
+    <i id="registerCancel" class="fas fa-times" style="display: block;"></i>
+    <div class="container">
+      <form id="Register">
+        <div class="form-group">
+          <input type="Text" class="form-control" id="inputEmail" placeholder="Imie i Nazwisko">
+        </div>
+        <div class="form-group">
+          <input type="email" class="form-control" id="inputEmail" placeholder="Adres Email">
+        </div>
+        <div class="form-group">
+          <input type="password" class="form-control" id="inputPassword" placeholder="Hasło">
+        </div>
+        <div class="form-group">
+          <input type="password" class="form-control" id="inputPassword" placeholder="Powtorz hasło">
+        </div>
+        <button type="submit" class="btn btn-primary">Zarejestruj</button>
+      </form>
+    </div>
+  </div>
   </div>
 </body>
 

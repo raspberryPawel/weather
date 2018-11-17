@@ -1,7 +1,6 @@
 $(document).ready(function () {
     var sign = ['ą', 'ć', 'ę', 'ł', 'ń', 'ó', 'ś', 'ź', 'ż', ' '];
     var signUTF = ['%C4%85 ', '%C4%87 ', '%C4%99', '%C5%82', '%C5%84', '%C3%B3', '%C5%9B', '%C5%BA', '%C5%BC', '%20'];
-
     $("#search").on("input", function () {
         $("#searchAutoComplete")
             .empty()
@@ -34,7 +33,7 @@ $(document).ready(function () {
                             .attr("key", obj[i].Key)
                             .html(obj[i].LocalizedName + ", " + obj[i].AdministrativeArea.LocalizedName + ", " + obj[i].Country.LocalizedName)
                             .on("click", optionClick);
-                        length += 48;
+                        length += 50;
                         $("#searchAutoComplete")
                             .append(div)
                             .css("transition", "1s")
@@ -49,6 +48,9 @@ $(document).ready(function () {
     });
 
     function optionClick() {
+        $("#searchAutoComplete")
+            .css("transition", "1s")
+            .css("height", "0px");
         var city = this.innerHTML;
         $("#search").val(city);
         let toSearch = this.attributes.key.value;
@@ -59,7 +61,8 @@ $(document).ready(function () {
             success: function (data) {
                 var obj = JSON.parse(JSON.parse(data));
                 $("#searchAutoComplete").empty();
-                initMap(obj.GeoPosition.Latitude, obj.GeoPosition.Longitude);
+                initMap(obj.GeoPosition.Latitude, obj.GeoPosition.Longitude, 13);
+                //console.log(obj.GeoPosition.Latitude, obj.GeoPosition.Longitude);
                 var div = $("<div>")
                     .attr("id", "weatherInfo");
                 var hide = $("<div>")
@@ -73,12 +76,12 @@ $(document).ready(function () {
                             $("#hideWeather")
                                 .html('Pokaż pogodę <i class="fas fa-arrow-up"></i>')
                         }
-                        else{
+                        else {
                             $("#weatherInfo")
-                            .css("transition", "1s")
-                            .css("top", "0%");
-                        $("#hideWeather")
-                            .html("Ukryj pogodę <i class='fas fa-arrow-down'></i>")
+                                .css("transition", "1s")
+                                .css("top", "0%");
+                            $("#hideWeather")
+                                .html("Ukryj pogodę <i class='fas fa-arrow-down'></i>")
                         }
 
                     });
@@ -90,6 +93,7 @@ $(document).ready(function () {
             },
         });
     }
+    setTimeout(function () { initMap("52.232", "21.007", 5); }, 1000)
 });
 
 function repleacePolishLetters(sign, signUTF, toSearch) {
