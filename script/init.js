@@ -4,7 +4,8 @@ $(document).ready(function () {
     $("#search").on("input", function () {
         $("#searchAutoComplete")
             .empty()
-            .css("height", "0px");
+            .css("height", "0px")
+            .css("padding", "0 0 0 0");
         let toSearch = this.value;
         let newSearch = repleacePolishLetters(sign, signUTF, toSearch);
 
@@ -33,11 +34,12 @@ $(document).ready(function () {
                             .attr("key", obj[i].Key)
                             .html(obj[i].LocalizedName + ", " + obj[i].AdministrativeArea.LocalizedName + ", " + obj[i].Country.LocalizedName)
                             .on("click", optionClick);
-                        length += 50;
+                        //length += 50;
                         $("#searchAutoComplete")
                             .append(div)
                             .css("transition", "1s")
-                            .css("height", length);
+                            .css("padding", "16px 0 8px 0px")
+                            .css("height", "auto");
                     }
                 }
             },
@@ -50,7 +52,9 @@ $(document).ready(function () {
     function optionClick() {
         $("#searchAutoComplete")
             .css("transition", "1s")
-            .css("height", "0px");
+            .css("height", "0px")
+            .css("padding", "0 0 0 0");
+
         var city = this.innerHTML;
         $("#search").val(city);
         let toSearch = this.attributes.key.value;
