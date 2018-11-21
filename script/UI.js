@@ -1,4 +1,5 @@
 $(document).ready(function () {
+    $('[data-toggle="tooltip"]').tooltip();
     // wysuwane menu
     var click = 0;
     $("#menu-button").on("click", function () {
@@ -6,8 +7,12 @@ $(document).ready(function () {
     });
 
     $("#loginCancel").on("click", function () {
-        $("#login").css("transition", "1s").css("top", "-100%");
+        $("#login").css("transition", "1s").css("top", "-1000%");
     });
+    $("#registerCancel").on("click", function () {
+        $("#registerForm").css("transition", "1s").css("top", "-1000%");
+    });
+
     $("#sigIn").on("click", function () {
         $("#login").css("transition", "1s").css("top", "0%");
         click = show_Menu(click);

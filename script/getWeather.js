@@ -23,7 +23,6 @@ function getWeather(toSearch) {
                 console.log("wyczerpano liczbę użyć  klucza");
             }
             else {
-                var order = 0;
                 for (var i = 0; i < 4; i++) {
                     if (todayIsDay + i == 7) {
                         var today = days[0];
@@ -40,13 +39,64 @@ function getWeather(toSearch) {
                     else {
                         var today = days[todayIsDay + i];
                     }
+                    var dayState = obj.DailyForecasts[i].Day.Icon;
+                    var nightState = obj.DailyForecasts[i].Night.Icon;
+                    console.log("daystate=>> ", dayState);
+                    console.log("nightstate=>> ", nightState);
+
+                    var dayImage = "suncloud.png";
+                    var nightImage = "mooncloud.png";
+
+                    if (dayState >= 1 && dayState <= 3) {
+                        dayImage = "sun.png";
+                    }
+                    else if (dayState >= 4 && dayState <= 5 || dayState >= 20 && dayState <= 21 || dayState == 32) {
+                        dayImage = "suncloud.png";
+                    }
+                    else if (dayState >= 6 && dayState <= 8) {
+                        dayImage = "cloud.png";
+                    }
+                    else if (dayState >= 12 && dayState <= 14 || dayState == 18) {
+                        dayImage = "rain.png";
+                    }
+                    else if (dayState >= 15 && dayState <= 17) {
+                        dayImage = "thunder.png";
+                    }
+                    else if (dayState >= 22 && dayState <= 29 || dayState == 31 || dayState >= 43 && dayStates <= 44 || dayState == 19) {
+                        dayImage = "snow.png";
+                    }
+                    else if (dayState == 11) {
+                        dayImage = "fog.png";
+                    }
+
+
+                    if (nightState >= 33 && nightState <= 34) {
+                        nightImage = "blood.png";
+                    }
+                    else if (nightState >= 35 && nightState <= 37) {
+                        nightImage = "mooncloud.png";
+                    }
+                    else if (nightState == 38) {
+                        nightImage = "cloud.png";
+                    }
+                    else if (nightState >= 39 && nightState <= 40) {
+                        nightImage = "rain.png";
+                    }
+                    else if (nightState >= 41 && nightState <= 42) {
+                        nightImage = "thunder.png";
+                    }
+                    else if (nightState >= 43 && nightState <= 44 || nightState >= 24 && nightState <= 29) {
+                        nightImage = "snow.png";
+                    }
+
+
                     var t;
                     var speed;
                     let div;
                     let day;
-                    ({ t, speed, div, day, order } = createDayElements(order, obj, i, today, dayVisible));
+                    ({ t, speed, div, day } = createDayElements(obj, i, today, dayVisible, dayImage));
 
-                    var { t, speed, night } = createNightElement(t, obj, i, today, speed, nightVisible);
+                    var { t, speed, night } = createNightElement(t, obj, i, today, speed, nightVisible, nightImage);
 
                     div
                         .append(day)
@@ -61,10 +111,10 @@ function getWeather(toSearch) {
     });
 }
 
-function createNightElement(t, obj, i, today, speed, nightVisible) {
+function createNightElement(t, obj, i, today, speed, nightVisible, nightImage) {
     let imageN = $("<div>")
         .attr("class", "weatherImage")
-        .css("background-image", "url(images/Moon.png)");
+        .css("background-image", "url(images/night/" + nightImage + ")");
     var t = Math.floor((obj.DailyForecasts[i].Temperature.Minimum.Value - 32) / 1.8);
     let temperatureN = $("<div>")
         .attr("class", "weatherTemperature")
@@ -99,14 +149,12 @@ function createNightElement(t, obj, i, today, speed, nightVisible) {
     return { t, speed, night };
 }
 
-function createDayElements(order, obj, i, today, dayVisible) {
+function createDayElements(obj, i, today, dayVisible, dayImage) {
     let div = $("<div>")
         .attr("class", "DailyWeather")
-        .css("order", order);
-    order++;
     let image = $("<div>")
         .attr("class", "weatherImage")
-        .css("background-image", "url(images/Sun.png)");
+        .css("background-image", "url(images/day/" + dayImage + ")");
     var t = Math.floor((obj.DailyForecasts[i].Temperature.Maximum.Value - 32) / 1.8);
     let temperature = $("<div>")
         .attr("class", "weatherTemperature")
@@ -138,5 +186,5 @@ function createDayElements(order, obj, i, today, dayVisible) {
         .append(temperature)
         .append(wind)
         .append(weatherState);
-    return { t, speed, div, day, order };
+    return { t, speed, div, day };
 }

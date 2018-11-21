@@ -9,19 +9,28 @@
   <!-- style -->
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
     crossorigin="anonymous">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
   <link rel="stylesheet" href="/maps/documentation/javascript/cgc/demos.css">
   <link rel="stylesheet" href="style/main.css">
+  <link rel="stylesheet" href="style/searchStyle.css">
+  <link rel="stylesheet" href="style/loginForm.css">
+  <link rel="stylesheet" href="style/navStyle.css">
+  <link rel="stylesheet" href="style/weatherStyle.css">
+
   <!-- script -->
   <script src="script/jquery.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
   <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDaZwpc5qZXFmbTwGjjy41i-FuggEaJHF4&callback=initMap"
     async defer></script>
   <script src="script/map.js"></script>
   <script src="script/UI.js"></script>
   <script src="script/getWeather.js"></script>
+  <script src="script/Net.js"></script>
   <script src="script/init.js"></script>
 
   <!-- font -->
   <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
   <!-- icons -->
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU"
     crossorigin="anonymous">
@@ -34,6 +43,7 @@
       </div>
       <div class="col-xl-8 col-lg-8 col-md-10 col-sm-12 d-flex justify-content-center">
         <input type="text" placeholder="Wpisz cokolwiek aby wyszukać.." id="search">
+        <div id="loc" title="Znajdź swoją lokalizację" ><i class="fas fa-map-marker-alt"></i></div>
       </div>
       <div class="col-xl-2 col-lg-2 col-md-1 col-sm-12 d-flex justify-content-center">
       </div>
@@ -95,21 +105,29 @@
     <div class="container">
       <form id="Register">
         <div class="form-group">
-          <input type="Text" class="form-control" id="inputEmail" placeholder="Imie i Nazwisko">
+          <input type="Text" id="registerName" class="form-control" id="inputEmail" placeholder="Imie i Nazwisko">
         </div>
         <div class="form-group">
-          <input type="email" class="form-control" id="inputEmail" placeholder="Adres Email">
+          <input type="email" id="registerEmail" class="form-control" id="inputEmail" placeholder="Adres Email" title="Adres email jest nieprawidłowy">
         </div>
         <div class="form-group">
-          <input type="password" class="form-control" pattern="[A-Za-z]{3}" id="inputPassword" placeholder="Hasło">
+          <input type="password" id="registerPassword" class="form-control" pattern="(.{3}).+" data-toggle="tooltip" id="inputPassword" title="Hasło powinno zawierać więcej niż 3 litery"
+            placeholder="Hasło">
         </div>
         <div class="form-group">
-          <input type="password" class="form-control" pattern="[A-Za-z]{3}" id="inputPassword" placeholder="Powtorz hasło">
+          <input type="password" id="registerPasswordRepeat" class="form-control" pattern="(.{3}).+" data-toggle="tooltip" id="inputPassword" title="Hasło powinno zawierać więcej niż 3 litery"
+            placeholder="Powtorz hasło">
         </div>
-        <button type="submit" class="btn btn-primary">Zarejestruj</button>
+        <button type="submit" id="registerSubmit" class="btn btn-primary">Zarejestruj</button>
+        <div id="info" style="text-align: center; padding: 10px;"></div>
       </form>
     </div>
   </div>
+  </div>
+
+  <div id="positionInfo">
+      <h1 id="posInfo">Określamy Twoją lokalizację</h1>
+      <i class="fas fa-spinner"></i>
   </div>
 </body>
 
