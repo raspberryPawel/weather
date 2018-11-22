@@ -49,6 +49,52 @@ $(document).ready(function () {
     $("#show").on("click", function () {
         $("#adminPage nav").animate({ left: "0px" }, 500);
     });
+
+    var stylesTab = [
+        { styleName: "multiMapStyle", name: multiMapStyle, visibleName: "Multi Brand Network", id: "mapMulti" },
+        { styleName: "lightMapStyle", name: lightMapStyle, visibleName: "Light Grey", id: "mapLight" },
+        { styleName: "paleMapStyle", name: paleMapStyle, visibleName: "Pale Dawn", id: "mapPale" },
+        { styleName: "assinMapStyle", name: assinMapStyle, visibleName: "Assassin's Creed IV", id: "mapAssassin" },
+        { styleName: "appleMapStyle", name: appleMapStyle, visibleName: "Apple Maps-esque", id: "mapApple" },
+        { styleName: "grayMapStyle", name: grayMapStyle, visibleName: "Shades of Grey", id: "mapShades" }
+    ]
+
+    $("#design").on("click", function () {
+        $("#adminPage nav").animate({ left: "-300px" }, 500);
+        $("#content").empty();
+        stylesTab.forEach(element => {
+            var container = $("<div>")
+                .attr("class", "mapContainer")
+                .attr("mapName", element.name)
+            var h1 = $("<h1>")
+                .html(element.visibleName)
+            var map = $("<div>")
+                .attr("class", "exampleMap")
+                .attr("id", element.id)
+            var input = $("<input>")
+                .attr("class", "styleCheckbox")
+                .attr("type", "checkbox")
+                .attr("mapName", element.styleName)
+                .on("click", function () {
+                    var checkbox = $(".styleCheckbox");
+                    console.log(checkbox);
+                    for (var i = 0; i < checkbox.length; i++) {
+                        checkbox[i].checked = false;
+                    }
+                    setCookie("mapStyle", this.attributes.mapName.value, 1000, 2, 2, 1);
+                    this.checked = true;
+                });
+            container
+                .append(h1)
+                .append(input)
+                .append(map);
+            $("#content").append(container);
+            initMap("52.232", "21.007", 12, element.id, element.name);
+        });
+
+        //$("#content").html("chuj design");
+
+    });
 });
 
 function show_Menu(click) {

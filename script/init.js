@@ -1,4 +1,13 @@
+var mapStyleName = grayMapStyle;
 $(document).ready(function () {
+    var x = getCookie('mapStyle');
+    console.log("cookie: ==> ");
+    if (x != null || x != "") {
+        mapStyleName = window[x];
+    }
+    else {
+        mapStyleName = grayMapStyle;
+    }
     $("#loc").on("click", function () {
         getLocation();
     });
@@ -68,7 +77,7 @@ $(document).ready(function () {
             success: function (data) {
                 var obj = JSON.parse(JSON.parse(data));
                 $("#searchAutoComplete").empty();
-                initMap(obj.GeoPosition.Latitude, obj.GeoPosition.Longitude, 13);
+                initMap(obj.GeoPosition.Latitude, obj.GeoPosition.Longitude, 13, "map", mapStyleName);
                 //console.log(obj.GeoPosition.Latitude, obj.GeoPosition.Longitude);
                 createWeatherContainer();
                 getWeather(toSearch);
@@ -78,7 +87,7 @@ $(document).ready(function () {
             },
         });
     }
-    setTimeout(function () { initMap("52.232", "21.007", 5); }, 1000)
+    setTimeout(function () { initMap("52.232", "21.007", 5, "map", mapStyleName); }, 1000)
 });
 
 function createWeatherContainer() {
@@ -172,7 +181,7 @@ function getPositionFromLatLon(newSearch) {
                 console.log("obj======> " + obj);
                 console.log("long======> " + obj.GeoPosition.Longitude);
                 $("#search").val(obj.LocalizedName);
-                initMap(obj.GeoPosition.Latitude, obj.GeoPosition.Longitude, 13);
+                initMap(obj.GeoPosition.Latitude, obj.GeoPosition.Longitude, 13, "map", mapStyleName);
                 createWeatherContainer();
                 getWeather(obj.Key);
                 $("#positionInfo")
