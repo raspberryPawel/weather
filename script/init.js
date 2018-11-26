@@ -1,14 +1,14 @@
 var mapStyleName = grayMapStyle;
+var control = true;
 $(document).ready(function () {
-    var x = getCookie('mapStyle');
-    console.log("cookie: ==> ");
-    if (x != null || x != "") {
-        mapStyleName = window[x];
-    }
-    else {
-        mapStyleName = grayMapStyle;
-    }
+    getCookieMapStyle();
     $("#loc").on("click", function () {
+        control = true;
+        getLocation();
+    });
+
+    $("#save").on("click", function () {
+        control = false;
         getLocation();
     });
     var sign = ['ą', 'ć', 'ę', 'ł', 'ń', 'ó', 'ś', 'ź', 'ż', ' '];
@@ -62,33 +62,31 @@ $(document).ready(function () {
     });
 
     function optionClick() {
+        getCookieMapStyle();
         $("#searchAutoComplete")
             .css("transition", "1s")
             .css("height", "0px")
             .css("padding", "0 0 0 0");
-
         var city = this.innerHTML.split(",")[0];
         $("#search").val(city);
         let toSearch = this.attributes.key.value;
-        $.ajax({
-            url: "php/getLocation.php",
-            data: { search: toSearch },
-            type: "POST",
-            success: function (data) {
-                var obj = JSON.parse(JSON.parse(data));
-                $("#searchAutoComplete").empty();
-                initMap(obj.GeoPosition.Latitude, obj.GeoPosition.Longitude, 13, "map", mapStyleName);
-                //console.log(obj.GeoPosition.Latitude, obj.GeoPosition.Longitude);
-                createWeatherContainer();
-                getWeather(toSearch);
-            },
-            error: function (xhr, status, error) {
-                //console.log(xhr);
-            },
-        });
+        lastSearch(city, toSearch);
+        getWeatherFromKey(toSearch)
     }
-    setTimeout(function () { initMap("52.232", "21.007", 5, "map", mapStyleName); }, 1000)
+    setTimeout(function () { initMap("52.232", "21.007", 5, "map", mapStyleName, true, 1); }, 1000)
 });
+
+
+function getCookieMapStyle() {
+    var x = getCookie('mapStyle');
+    console.log("ciasteczko: ", x);
+    if (x != null || x != "") {
+        mapStyleName = window[x];
+    }
+    else {
+        mapStyleName = grayMapStyle;
+    }
+}
 
 function createWeatherContainer() {
     var div = $("<div>")
@@ -152,41 +150,117 @@ function getLocation() {
             console.log(JSON.stringify(data, null, 2));
             var position = data;
             var newSearch = position.lat + "," + position.lon;
-            console.log(newSearch);
-            getPositionFromLatLon(newSearch)
+            console.log(control, " <=========control");
+            if (control)
+                getPositionFromLatLon(newSearch)
+            else
+                savePosition(position.lat, position.lon)
         });
     }
 }
 
-function showPosition(position) {
+function savePosition(lat, lon) {
+    var id = getCookie('userID');
+    if (id != null && id != '') {
+        $.ajax({
+            url: "php/SavePosition.php",
+            data: { latitude: lat, longitude: lon, userID: id, },
+            type: "POST",
+            success: function (data) {
+                var obj = JSON.parse(JSON.parse(data));
+                console.log("obj ", obj);
+                if (obj == true) {
+                    $("#positionInfo")
+                        .css("display", "none");
+                }
+                else {
+                    console.log("wystąpił nieoczekiwany błąd z bazą danych");
+                }
+            },
+            error: function (xhr, status, error) {
+                //console.log(xhr);
+            },
+        });
+    }
+    else {
+        $("#login").animate({ right: "0%" }, 1000);
+    }
 
+}
+
+function showPosition(position) {
     var newSearch = position.coords.latitude + "," + position.coords.longitude;
     console.log(newSearch);
-    getPositionFromLatLon(newSearch)
+    if (control)
+        getPositionFromLatLon(newSearch)
+    else
+        savePosition(position.coords.latitude, position.coords.longitude)
 }
 
 function getPositionFromLatLon(newSearch) {
+    getCookieMapStyle();
     $.ajax({
         url: "php/Geoposition.php",
         data: { search: newSearch },
         type: "POST",
         success: function (data) {
             var obj = JSON.parse(JSON.parse(data));
-            console.log("obj ", obj.Message);
+            console.log("obj ", obj);
             if (obj.Message == "The allowed number of requests has been exceeded.") {
                 console.log("wyczerpano liczbę użyć  klucza");
             }
             else {
                 console.log("key======> " + obj.LocalizedName);
-                console.log("obj======> " + obj);
+                console.log("obj======> " + obj.Key);
                 console.log("long======> " + obj.GeoPosition.Longitude);
                 $("#search").val(obj.LocalizedName);
-                initMap(obj.GeoPosition.Latitude, obj.GeoPosition.Longitude, 13, "map", mapStyleName);
+                initMap(obj.GeoPosition.Latitude, obj.GeoPosition.Longitude, 13, "map", mapStyleName, true, 1);
                 createWeatherContainer();
                 getWeather(obj.Key);
+                lastSearch(obj.LocalizedName, obj.Key)
                 $("#positionInfo")
                     .css("display", "none");
             }
+        },
+        error: function (xhr, status, error) {
+            //console.log(xhr);
+        },
+    });
+}
+
+function getWeatherFromKey(toSearch){
+    $.ajax({
+        url: "php/getLocation.php",
+        data: { search: toSearch},
+        type: "POST",
+        success: function (data) {
+            var obj = JSON.parse(JSON.parse(data));
+            $("#searchAutoComplete").empty();
+            initMap(obj.GeoPosition.Latitude, obj.GeoPosition.Longitude, 13, "map", mapStyleName, true, 1);
+            //console.log(obj.GeoPosition.Latitude, obj.GeoPosition.Longitude);
+            createWeatherContainer();
+            getWeather(toSearch);
+            $("#adminPage").animate({ right: "-120%" }, 500);
+        },
+        error: function (xhr, status, error) {
+            //console.log(xhr);
+        },
+    });
+}
+
+function lastSearch(city, toSearch) {
+    var id = getCookie('userID');
+    $.ajax({
+        url: "php/lastSearch.php",
+        data: { search: toSearch, city: city, userID: id },
+        type: "POST",
+        success: function (data) {
+            var obj = JSON.parse(JSON.parse(data));
+            $("#searchAutoComplete").empty();
+            initMap(obj.GeoPosition.Latitude, obj.GeoPosition.Longitude, 13, "map", mapStyleName, true, 1);
+            //console.log(obj.GeoPosition.Latitude, obj.GeoPosition.Longitude);
+            createWeatherContainer();
+            getWeather(toSearch);
         },
         error: function (xhr, status, error) {
             //console.log(xhr);

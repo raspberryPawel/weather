@@ -1,13 +1,4 @@
-function initMap(latitude, longitude, zoomVal, id, mapStyle) {
-    var stylesTab = [
-        { name: "multiMapStyle", visibleName: "Multi Brand Network", },
-        { name: "lightMapStyle", visibleName: "Light Grey", },
-        { name: "paleMapStyle", visibleName: "Pale Dawn", },
-        { name: "assinMapStyle", visibleName: "Assassin's Creed IV", },
-        { name: "appleMapStyle", visibleName: "Apple Maps-esque", },
-        { name: "grayMapStyle", visibleName: "Shades of Grey", }
-    ]
-
+function initMap(latitude, longitude, zoomVal, id, mapStyle, controlMap, positionObject) {
     //var myLatLng = { lat: latitude, lng: longitude };
     var myLatLng = new google.maps.LatLng(parseFloat(latitude), parseFloat(longitude));
     console.log("inicjuje mapę");
@@ -20,10 +11,23 @@ function initMap(latitude, longitude, zoomVal, id, mapStyle) {
     });
 
     // Create a marker and set its position.
-    var marker = new google.maps.Marker({
-        map: map,
-        position: myLatLng,
-        title: 'Hello World!',
-        icon: 'images/marker.png' // null = default icon
-    });
+    if (controlMap) {
+        var marker = new google.maps.Marker({
+            map: map,
+            position: myLatLng,
+            title: 'Hello World!',
+            icon: 'images/marker.png' // null = default icon
+        });
+    }
+    else {
+        positionObject.forEach(element => {
+            var myLatLng = new google.maps.LatLng(parseFloat(element.latitude), parseFloat(element.longitude));
+            var marker = new google.maps.Marker({
+                map: map,
+                position: myLatLng,
+                title: 'Odwiedzono: ' + element.date,
+                icon: 'images/marker.png' // null = default icon
+            });
+        });
+    }
 }

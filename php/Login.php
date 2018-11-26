@@ -33,6 +33,8 @@ if (isset($_POST['password'], $_POST['email'])) {
                 $cookie_name = "userName";
                 $cookie_value = $result["email"];
                 setcookie($cookie_name, $cookie_value, time() + (5400), "/"); // 86400 = 1 day
+                setcookie("userID", $result['id'], time() + (5400), "/"); // 86400 = 1 day
+
                 echo ('valid');
             } else {
                 echo ('invalidPassword');

@@ -20,7 +20,7 @@ $(document).ready(function () {
                         else if (obj == "success") {
                             $("#info").html("Gratulacje, konto zostało założone");
                             setTimeout(function () {
-                                $("#registerForm").css("transition", "2s").css("top", "-1000%");
+                                $("#registerForm").animate({ right: "-120%" }, 500);
                             }, 1500);
                         }
 
@@ -58,7 +58,7 @@ $(document).ready(function () {
                     else if (obj == "valid") {
                         $("#loginInfo").html("Zalogowano");
                         setTimeout(function () {
-                            $("#login").css("transition", "2s").css("top", "-1000%");
+                            $("#login").animate({ right: "-120%" }, 500);
                         }, 1500);
                     }
                     else if (obj == "invalidPassword")
@@ -70,7 +70,6 @@ $(document).ready(function () {
         }
         else {
             $("#info").html("Uzupełnij wymagane pola");
-            console.log("taki chuj nie identyczne");
         }
     });
 });
@@ -100,12 +99,12 @@ function setCookie(key, value, expireDays, expireHours, expireMinutes, expireSec
     if (expireSeconds) {
         expireDate.setSeconds(expireDate.getSeconds() + expireSeconds);
     }
-    document.cookie = key +"="+ escape(value) +
-        ";domain="+ window.location.hostname +
-        ";path=/"+
-        ";expires="+expireDate.toUTCString();
+    document.cookie = key + "=" + escape(value) +
+        ";domain=" + window.location.hostname +
+        ";path=/" +
+        ";expires=" + expireDate.toUTCString();
 }
 
 function deleteCookie(name) {
-    setCookie(name, "", null , null , null, 1);
+    setCookie(name, "", null, null, null, 1);
 }

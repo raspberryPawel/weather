@@ -28,10 +28,10 @@
     async defer></script>
   <script src="script/mapStyle.js"></script>
   <script src="script/map.js"></script>
-  <script src="script/UI.js"></script>
   <script src="script/getWeather.js"></script>
   <script src="script/Net.js"></script>
   <script src="script/init.js"></script>
+  <script src="script/UI.js"></script>
   <!-- Our Custom CSS -->
   <link rel="stylesheet" href="style2.css">
   <!-- Scrollbar Custom CSS -->
@@ -52,6 +52,7 @@
       <div class="col-xl-8 col-lg-8 col-md-10 col-sm-12 d-flex justify-content-center">
         <input type="text" placeholder="Wpisz cokolwiek aby wyszukać.." id="search">
         <div id="loc" title="Znajdź swoją lokalizację"><i class="fas fa-map-marker-alt"></i></div>
+        <div id="save" title="Zapisz lokalizację na swojej mapie odwiedzonych miejsc!"> <i class="fas fa-bookmark"></i></div>
       </div>
       <div class="col-xl-2 col-lg-2 col-md-1 col-sm-12 d-flex justify-content-center">
       </div>
@@ -88,7 +89,7 @@
     </ul>
     <ul id="online">
       <li>
-        <a id="sigIn" href="#">Konto</a>
+        <a id="account" href="#">Konto</a>
       </li>
       <li>
         <a id="logout" href="#">Wyloguj</a>
@@ -140,9 +141,9 @@
       </form>
     </div>
   </div>
-  </div>
 
   <div id="adminPage" class="wrapper">
+    <i id="adminPageCancel" class="fas fa-times" style="display: block;"></i>
     <!-- Sidebar -->
     <nav id="sidebar">
       <div id="dismiss">
@@ -150,13 +151,13 @@
       </div>
       <ul>
         <li>
-          <a id="sigIn" href="#">Ostatnie wyszukiwania</a>
+          <a id="lastSearch" href="#">Ostatnie wyszukiwania</a>
         </li>
         <li>
           <a id="design" href="#">Wygląd aplikacji</a>
         </li>
         <li>
-          <a href="#contact">Kontakt</a>
+          <a id="savePosition" href="#">Zapisane pozycje</a>
         </li>
       </ul>
     </nav>
