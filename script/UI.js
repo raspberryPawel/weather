@@ -1,3 +1,36 @@
+var stylesTab = [
+    { styleName: "multiMapStyle", name: multiMapStyle, visibleName: "Multi Brand Network", id: "mapMulti" },
+    { styleName: "lightMapStyle", name: lightMapStyle, visibleName: "Light Grey", id: "mapLight" },
+    { styleName: "paleMapStyle", name: paleMapStyle, visibleName: "Pale Dawn", id: "mapPale" },
+    { styleName: "assinMapStyle", name: assinMapStyle, visibleName: "Assassin's Creed IV", id: "mapAssassin" },
+    { styleName: "appleMapStyle", name: appleMapStyle, visibleName: "Apple Maps-esque", id: "mapApple" },
+    { styleName: "grayMapStyle", name: grayMapStyle, visibleName: "Shades of Grey", id: "mapShades" },
+    { styleName: "natureMapStyle", name: natureMapStyle, visibleName: "Nature", id: "mapNature" },
+    { styleName: "bentleyMapStyle", name: bentleyMapStyle, visibleName: "Bentley", id: "mapBentley" },
+    { styleName: "cobaltMapStyle", name: cobaltMapStyle, visibleName: "Cobalt custom", id: "mapCobalt" },
+    { styleName: "sinCityMapStyle", name: sinCityMapStyle, visibleName: "Sin City", id: "mapSinCity" },
+    { styleName: "redMapStyle", name: redMapStyle, visibleName: "Red Map", id: "mapRed" },
+    { styleName: "lightMonochromeMapStyle", name: lightMonochromeMapStyle, visibleName: "Light Monochrome Bluish", id: "mapLightMonochrome" },
+    { styleName: "lightGreenMapStyle", name: lightGreenMapStyle, visibleName: "Light Green", id: "mapGreen" },
+]
+
+var pinsTab = [
+    "pin0",
+    "pin1",
+    "pin2",
+    "pin3",
+    "pin4",
+    "pin5",
+    "pin6",
+    "pin7",
+    "pin8",
+    "pin9",
+    "pin10",
+    "pin11",
+    "pin12",
+]
+
+
 $(document).ready(function () {
     //tolltip
     $('[data-toggle="tooltip"]').tooltip();
@@ -66,25 +99,11 @@ $(document).ready(function () {
         //$("#adminPage").css("transition", "2s").css("top", "-1000%");
         $("#adminPage").animate({ right: "-120%" }, 500);
     });
-    var stylesTab = [
-        { styleName: "multiMapStyle", name: multiMapStyle, visibleName: "Multi Brand Network", id: "mapMulti" },
-        { styleName: "lightMapStyle", name: lightMapStyle, visibleName: "Light Grey", id: "mapLight" },
-        { styleName: "paleMapStyle", name: paleMapStyle, visibleName: "Pale Dawn", id: "mapPale" },
-        { styleName: "assinMapStyle", name: assinMapStyle, visibleName: "Assassin's Creed IV", id: "mapAssassin" },
-        { styleName: "appleMapStyle", name: appleMapStyle, visibleName: "Apple Maps-esque", id: "mapApple" },
-        { styleName: "grayMapStyle", name: grayMapStyle, visibleName: "Shades of Grey", id: "mapShades" },
-        { styleName: "natureMapStyle", name: natureMapStyle, visibleName: "Nature", id: "mapNature" },
-        { styleName: "bentleyMapStyle", name: bentleyMapStyle, visibleName: "Bentley", id: "mapBentley" },
-        { styleName: "cobaltMapStyle", name: cobaltMapStyle, visibleName: "Cobalt custom", id: "mapCobalt" },
-        { styleName: "sinCityMapStyle", name: sinCityMapStyle, visibleName: "Sin City", id: "mapSinCity" },
-        { styleName: "redMapStyle", name: redMapStyle, visibleName: "Red Map", id: "mapRed" },
-        { styleName: "lightMonochromeMapStyle", name: lightMonochromeMapStyle, visibleName: "Light Monochrome Bluish", id: "mapLightMonochrome" },
-        { styleName: "lightGreenMapStyle", name: lightGreenMapStyle, visibleName: "Light Green", id: "mapGreen" },
-    ]
-
     $("#design").on("click", function () {
         $("#adminPage nav").animate({ left: "-300px" }, 500);
-        $("#content").empty();
+        $("#content")
+            .empty()
+            .html("<h1>Design mapy:</h1>");
         stylesTab.forEach(element => {
             var container = $("<div>")
                 .attr("class", "mapContainer")
@@ -112,8 +131,39 @@ $(document).ready(function () {
                 .append(h1)
                 .append(input)
                 .append(map);
-            $("#content").append(container);
+            $("#content")
+                .append(container);
             initMap("52.232", "21.007", 12, element.id, element.name, true, 1);
+        });
+    });
+
+    $("#pinDesign").on("click", function () {
+        $("#adminPage nav").animate({ left: "-300px" }, 500);
+        $("#content")
+            .empty()
+            .html("<h1>Design pinezki:</h1>");
+        pinsTab.forEach(element => {
+            var container = $("<div>")
+                .attr("class", "pinsContainer")
+                .css("background-image", "url(images/GooglePinsBig/" + element + ".png)")
+
+            var input = $("<input>")
+                .attr("class", "styleCheckbox")
+                .attr("pinsName", element)
+                .attr("type", "checkbox")
+                .on("click", function () {
+                    var checkbox = $(".styleCheckbox");
+                    console.log(checkbox);
+                    for (var i = 0; i < checkbox.length; i++) {
+                        checkbox[i].checked = false;
+                    }
+                    setCookie("pinName", this.attributes.pinsName.value, 1000, 2, 2, 1);
+                    this.checked = true;
+                    initMap("52.232", "21.007", 5, "map", mapStyleName, true, 1);
+                });
+            container.append(input);
+            $("#content")
+                .append(container);
         });
     });
 
@@ -151,21 +201,25 @@ $(document).ready(function () {
             success: function (data) {
                 var obj = JSON.parse(data);
                 console.log(obj);
+                var ul = $("<ul>")
                 obj.forEach(element => {
-                    var div = $("<div>")
-                    .attr("class", "lastSearchOption")
-                    .attr("key", element.key)
-                    .attr("searchID", element.id)
-                    .html(element.name)
-                    .on("click", function(){
-                        console.log(this.attributes.key.value);
-                        //console.log(this);
-                        getWeatherFromKey(this.attributes.key.value)
-                        var city = this.innerHTML;
-                        $("#search").val(city);
-                    });
-                    $("#content").append(div);
+                    var div = $("<li>")
+                        .attr("class", "lastSearchOption")
+                        .attr("key", element.key)
+                        .attr("searchID", element.id)
+                        .html(element.name)
+                        .on("click", function () {
+                            console.log(this.attributes.key.value);
+                            //console.log(this);
+                            getWeatherFromKey(this.attributes.key.value)
+                            var city = this.innerHTML;
+                            $("#search").val(city);
+                        });
+                    ul.append(div);
                 });
+                $("#content")
+                    .html("<h1>Ostatnio wyszukane:</h1>")
+                    .append(ul);
                 //getCookieMapStyle();
                 //initMap("52.232", "21.007", 5, "savePositionMap", mapStyleName, false, obj);
             },

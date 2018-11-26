@@ -1,5 +1,6 @@
 function initMap(latitude, longitude, zoomVal, id, mapStyle, controlMap, positionObject) {
     //var myLatLng = { lat: latitude, lng: longitude };
+    var pinName = getCookie('pinName');
     var myLatLng = new google.maps.LatLng(parseFloat(latitude), parseFloat(longitude));
     console.log("inicjuje mapę");
     // Create a map object and specify the DOM element
@@ -16,7 +17,7 @@ function initMap(latitude, longitude, zoomVal, id, mapStyle, controlMap, positio
             map: map,
             position: myLatLng,
             title: 'Hello World!',
-            icon: 'images/marker.png' // null = default icon
+            icon: 'images/GooglePins/'+pinName+'.png' // null = default icon
         });
     }
     else {
@@ -26,7 +27,7 @@ function initMap(latitude, longitude, zoomVal, id, mapStyle, controlMap, positio
                 map: map,
                 position: myLatLng,
                 title: 'Odwiedzono: ' + element.date,
-                icon: 'images/marker.png' // null = default icon
+                icon: 'images/GooglePins/'+pinName+'.png' // null = default icon
             });
         });
     }
