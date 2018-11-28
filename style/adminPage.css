@@ -139,3 +139,9 @@
 #content h1 {
     width: 100%;
 }
+
+.changePassword, .userSettingsContainer{
+    overflow: hidden;
+    cursor: pointer;
+    transition: 1s;
+}

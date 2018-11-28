@@ -102,7 +102,7 @@
   <div id="login">
     <i id="loginCancel" class="fas fa-times" style="display: block;"></i>
     <div class="container">
-      <div id="Login">
+      <div class="Login">
         <div class="form-group">
           <input type="email" class="form-control" id="inputEmail" placeholder="Adres Email">
         </div>
@@ -110,7 +110,7 @@
           <input type="password" class="form-control" id="inputPassword" placeholder="Hasło">
         </div>
         <div class="forgot">
-          <a href="reset.html">Forgot password?</a>
+          <div id="forgotPassword">Forgot password?</div>
         </div>
         <button type="submit" id="loginSubmit" class="btn btn-primary">Zaloguj</button>
         <div id="loginInfo" style="text-align: center; padding: 10px;"></div>
@@ -121,7 +121,7 @@
   <div id="registerForm">
     <i id="registerCancel" class="fas fa-times" style="display: block;"></i>
     <div class="container">
-      <div id="Register">
+      <div class="Login">
         <div class="form-group">
           <input type="Text" id="registerName" class="form-control" placeholder="Imie i Nazwisko">
         </div>
@@ -151,16 +151,19 @@
       </div>
       <ul>
         <li>
-          <div id="lastSearch" href="#">Ostatnie wyszukiwania</div>
+          <div id="lastSearch">Ostatnie wyszukiwania <i class="fas fa-search-location"></i></div>
         </li>
         <li>
-          <div id="design" href="#">Wygląd mapy</div>
+          <div id="design">Wygląd mapy <i class="fas fa-map"></i></div>
         </li>
         <li>
-          <div id="pinDesign" href="#">Wygląd pinezki</div>
+          <div id="pinDesign">Wygląd pinezki <i class="fas fa-map-pin"></i></div>
         </li>
         <li>
-          <div id="savePosition" href="#">Zapisane pozycje</div>
+          <div id="savePosition">Zapisane pozycje <i class="fas fa-globe-americas"></i></div>
+        </li>
+        <li>
+          <div id="userSettings">Ustawienia konta <i class="fas fa-cogs"></i></div>
         </li>
       </ul>
     </nav>
@@ -171,6 +174,21 @@
     </div>
   </div>
 
+  <div id="forgotPasswordPanel">
+    <i id="recoveryPasswordCancel" class="fas fa-times" style="display: block;"></i>
+    <div class="container">
+      <div class="Login">
+        <div class="form-group">
+          <input type="email" class="form-control" id="recoveryInputEmail" placeholder="Adres Email">
+        </div>
+        <div class="form-group">
+          <input type="text" class="form-control" id="recoveryInputName" placeholder="Imię i Nazwisko">
+        </div>
+        <button type="submit" id="recoverySubmit" class="btn btn-primary">Odzyskaj Hasło</button>
+        <div id="recoveryInfo" style="text-align: center; padding: 10px;"></div>
+      </div>
+    </div>
+  </div>
 
   <div id="positionInfo">
     <h1 id="posInfo">Określamy Twoją lokalizację</h1>

@@ -1,43 +1,11 @@
-var stylesTab = [
-    { styleName: "multiMapStyle", name: multiMapStyle, visibleName: "Multi Brand Network", id: "mapMulti" },
-    { styleName: "lightMapStyle", name: lightMapStyle, visibleName: "Light Grey", id: "mapLight" },
-    { styleName: "paleMapStyle", name: paleMapStyle, visibleName: "Pale Dawn", id: "mapPale" },
-    { styleName: "assinMapStyle", name: assinMapStyle, visibleName: "Assassin's Creed IV", id: "mapAssassin" },
-    { styleName: "appleMapStyle", name: appleMapStyle, visibleName: "Apple Maps-esque", id: "mapApple" },
-    { styleName: "grayMapStyle", name: grayMapStyle, visibleName: "Shades of Grey", id: "mapShades" },
-    { styleName: "natureMapStyle", name: natureMapStyle, visibleName: "Nature", id: "mapNature" },
-    { styleName: "bentleyMapStyle", name: bentleyMapStyle, visibleName: "Bentley", id: "mapBentley" },
-    { styleName: "cobaltMapStyle", name: cobaltMapStyle, visibleName: "Cobalt custom", id: "mapCobalt" },
-    { styleName: "sinCityMapStyle", name: sinCityMapStyle, visibleName: "Sin City", id: "mapSinCity" },
-    { styleName: "redMapStyle", name: redMapStyle, visibleName: "Red Map", id: "mapRed" },
-    { styleName: "lightMonochromeMapStyle", name: lightMonochromeMapStyle, visibleName: "Light Monochrome Bluish", id: "mapLightMonochrome" },
-    { styleName: "lightGreenMapStyle", name: lightGreenMapStyle, visibleName: "Light Green", id: "mapGreen" },
-]
-
-var pinsTab = [
-    "pin0",
-    "pin1",
-    "pin2",
-    "pin3",
-    "pin4",
-    "pin5",
-    "pin6",
-    "pin7",
-    "pin8",
-    "pin9",
-    "pin10",
-    "pin11",
-    "pin12",
-]
-
-
 $(document).ready(function () {
     //tolltip
     $('[data-toggle="tooltip"]').tooltip();
-    // wysuwane menu
+    //toogle rightside nav
     var click = 0;
     $("#menu-button").on("click", function () {
         click = show_Menu(click);
+        //get login cookie
         var x = getCookie('userName');
         if (x == null) {
             $("#online").css("display", "none");
@@ -47,79 +15,125 @@ $(document).ready(function () {
             $("#offline").css("display", "none");
             $("#online").css("display", "block");
         }
-        console.log("cookie: ==> ", x);
     });
-    //hide login panel
-    $("#loginCancel").on("click", function () {
-        //$("#login").css("transition", "2s").css("top", "-1000%");
-        $("#login").animate({ right: "-120%" }, 500);
-    });
-    //hide register panel
-    $("#registerCancel").on("click", function () {
-        //$("#registerForm").css("transition", "2s").css("top", "-1000%");
-        $("#registerForm").animate({ right: "-120%" }, 500);
-    });
-    //show login panel
-    $("#sigIn").on("click", function () {
-        //$("#login").css("transition", "1s").css("top", "0%");
-        $("#login").animate({ right: "0%" }, 1000);
-        click = show_Menu(click);
-    });
-    //show register panel
+
+    //show user register panel
     $("#register").on("click", function () {
-        //$("#registerForm").css("transition", "1s").css("top", "0%");
         $("#registerForm").animate({ right: "0%" }, 1000);
         click = show_Menu(click);
     });
+    //hide user register panel
+    $("#registerCancel").on("click", function () {
+        $("#registerForm").animate({ right: "-120%" }, 500);
+    });
 
-    //logout
+    //show user login panel
+    $("#sigIn").on("click", function () {
+        $("#login").animate({ right: "0%" }, 1000);
+        click = show_Menu(click);
+    });
+    //hide user login panel
+    $("#loginCancel").on("click", function () {
+        $("#login").animate({ right: "-120%" }, 500);
+    });
+
+    //user logout
     $("#logout").on("click", function () {
         deleteCookie('userName');
         //$("#login").css("transition", "2s").css("top", "-1000%");
         $("#login").animate({ right: "-120%" }, 500);
         click = show_Menu(click);
     });
-    //admin page sidebar 
-    $("#dismiss").on("click", function () {
-        $("#adminPage nav").animate({ left: "-350px" }, 500);
-    });
 
+    //show admin page sidebar 
     $("#show").on("click", function () {
-        $("#adminPage nav").animate({ left: "0px" }, 500);
+        $("#adminPage nav").animate({ left: "0px" }, 300);
+    });
+    //hide admin page sidebar 
+    $("#dismiss").on("click", function () {
+        $("#adminPage nav").animate({ left: "-350px" }, 300);
     });
 
+    //show user admin page
     $("#account").on("click", function () {
-        //$("#adminPage").css("transition", "2s").css("right", "0%");
         $("#adminPage").animate({ right: "0px" }, 1000);
         click = show_Menu(click);
     });
-
-    //hide register panel
+    //hide user admin page
     $("#adminPageCancel").on("click", function () {
-        //$("#adminPage").css("transition", "2s").css("top", "-1000%");
         $("#adminPage").animate({ right: "-120%" }, 500);
     });
+
+    //show password recovery panel
+    $("#forgotPassword").on("click", function () {
+        $("#forgotPasswordPanel").animate({ right: "0px" }, 1000);
+    });
+    //hide password recovery panel
+    $("#recoveryPasswordCancel").on("click", function () {
+        $("#forgotPasswordPanel").animate({ right: "-120%" }, 1000);
+    });
+
+    //select google map design
+    mapDesignClick();
+    //select google map pin design
+    designGooglePinsClick();
+    //save your position to DB
+    savePOsitionClick();
+    //select and change user settings
+    userSettingsClick();
+    //look at last search
+    lastSearchClick();
+});
+
+function changePasswordClick() {
+    $("#changePasswordSubmit").on("click", function () {
+        var id = getCookie('userID');
+        var password1 = $("#changePassword")[0].value;
+        var password2 = $("#changePasswordTwo")[0].value;
+        if (password1 == password2) {
+            $.ajax({
+                url: "php/ChangePassword.php",
+                data: { userID: id, password: password1 },
+                type: "POST",
+                success: function (data) {
+                    var obj = data;
+                    if (obj == 1) {
+                        $("#changePasswordInfo").html("Hasło zostało zmienione");
+                    }
+                    else {
+                        $("#changePasswordInfo").html("Wystąpił błąd. Hasło nie zostało zmienione");
+                    }
+                },
+                error: function (xhr, status, error) {
+                },
+            });
+        }
+        else
+            $("#changePasswordInfo").html("Hasła nie są identyczne");
+    });
+}
+
+function mapDesignClick() {
     $("#design").on("click", function () {
-        $("#adminPage nav").animate({ left: "-300px" }, 500);
+       $("#adminPage nav").animate({ left: "-300px" }, 100);
         $("#content")
             .empty()
             .html("<h1>Design mapy:</h1>");
         stylesTab.forEach(element => {
             var container = $("<div>")
                 .attr("class", "mapContainer")
-                .attr("mapName", element.styleName)
+                .attr("mapName", element.styleName);
             var h1 = $("<h1>")
-                .html(element.visibleName)
+                .html(element.visibleName);
             var map = $("<div>")
                 .attr("class", "exampleMap")
-                .attr("id", element.id)
+                .attr("id", element.id);
             var input = $("<input>")
                 .attr("class", "styleCheckbox")
                 .attr("type", "checkbox")
                 .attr("mapName", element.styleName)
                 .on("click", function () {
                     var checkbox = $(".styleCheckbox");
-                    console.log(checkbox);
                     for (var i = 0; i < checkbox.length; i++) {
                         checkbox[i].checked = false;
                     }
@@ -136,24 +150,24 @@ $(document).ready(function () {
             initMap("52.232", "21.007", 12, element.id, element.name, true, 1);
         });
     });
+}
 
+function designGooglePinsClick() {
     $("#pinDesign").on("click", function () {
-        $("#adminPage nav").animate({ left: "-300px" }, 500);
+       $("#adminPage nav").animate({ left: "-300px" }, 100);
         $("#content")
             .empty()
             .html("<h1>Design pinezki:</h1>");
         pinsTab.forEach(element => {
             var container = $("<div>")
                 .attr("class", "pinsContainer")
-                .css("background-image", "url(images/GooglePinsBig/" + element + ".png)")
-
+                .css("background-image", "url(images/GooglePinsBig/" + element + ".png)");
             var input = $("<input>")
                 .attr("class", "styleCheckbox")
                 .attr("pinsName", element)
                 .attr("type", "checkbox")
                 .on("click", function () {
                     var checkbox = $(".styleCheckbox");
-                    console.log(checkbox);
                     for (var i = 0; i < checkbox.length; i++) {
                         checkbox[i].checked = false;
                     }
@@ -166,12 +180,14 @@ $(document).ready(function () {
                 .append(container);
         });
     });
+}
 
+function savePOsitionClick() {
     $("#savePosition").on("click", function () {
-        $("#adminPage nav").animate({ left: "-300px" }, 500);
+       $("#adminPage nav").animate({ left: "-300px" }, 100);
         $("#content").empty();
         var map = $("<div>")
-            .attr("id", "savePositionMap")
+            .attr("id", "savePositionMap");
         $("#content").append(map);
         var id = getCookie('userID');
         $.ajax({
@@ -184,14 +200,41 @@ $(document).ready(function () {
                 initMap("52.232", "21.007", 5, "savePositionMap", mapStyleName, false, obj);
             },
             error: function (xhr, status, error) {
-                //console.log(xhr);
             },
         });
     });
+}
 
+function userSettingsClick() {
+    $("#userSettings").on("click", function () {
+       $("#adminPage nav").animate({ left: "-300px" }, 100);
+        $("#content")
+            .empty()
+            .html("<h1>Ustawienia użytkownika:</h1>");
+        var main = $("<div>");
+        var div = $("<div>")
+            .attr("class", "changePassword")
+            .html(' <div class="Login"><div class= "form-group"><input type="password" class="form-control" id="changePassword" placeholder="Nowe Hasło"></div><div class="form-group"><input type="password" class="form-control" id="changePasswordTwo" placeholder="Powtórz hasło"> </div><button type="submit" id="changePasswordSubmit" class="btn btn-primary">Zmień Hasło</button><div id="changePasswordInfo" style="text-align: center; padding: 10px;">chuj</div> </div>')
+            .css("display", "none");
+
+        var container = $("<div>")
+            .attr("class", "userSettingsContainer")
+            .html("Zmiana hasła")
+            .on("click", function () {
+                div.slideToggle(500);
+            });
+        main.append(container).append(div);
+        $("#content").append(main);
+
+        //event on change password submit
+        changePasswordClick();
+
+    });
+}
+
+function lastSearchClick() {
     $("#lastSearch").on("click", function () {
-        console.log("chuj nie działa");
-        $("#adminPage nav").animate({ left: "-300px" }, 500);
+       $("#adminPage nav").animate({ left: "-300px" }, 100);
         $("#content").empty();
         var id = getCookie('userID');
         $.ajax({
@@ -200,8 +243,7 @@ $(document).ready(function () {
             type: "POST",
             success: function (data) {
                 var obj = JSON.parse(data);
-                console.log(obj);
-                var ul = $("<ul>")
+                var ul = $("<ul>");
                 obj.forEach(element => {
                     var div = $("<li>")
                         .attr("class", "lastSearchOption")
@@ -209,9 +251,8 @@ $(document).ready(function () {
                         .attr("searchID", element.id)
                         .html(element.name)
                         .on("click", function () {
-                            console.log(this.attributes.key.value);
                             //console.log(this);
-                            getWeatherFromKey(this.attributes.key.value)
+                            getWeatherFromKey(this.attributes.key.value);
                             var city = this.innerHTML;
                             $("#search").val(city);
                         });
@@ -224,11 +265,10 @@ $(document).ready(function () {
                 //initMap("52.232", "21.007", 5, "savePositionMap", mapStyleName, false, obj);
             },
             error: function (xhr, status, error) {
-                //console.log(xhr);
             },
         });
     });
-});
+}
 
 function show_Menu(click) {
     if ($("#menu-button").children()[0].style.display == "block") {
@@ -253,3 +293,36 @@ function show_Menu(click) {
     }
     return click;
 }
+
+//google map design array/ style var names
+var stylesTab = [
+    { styleName: "multiMapStyle", name: multiMapStyle, visibleName: "Multi Brand Network", id: "mapMulti" },
+    { styleName: "lightMapStyle", name: lightMapStyle, visibleName: "Light Grey", id: "mapLight" },
+    { styleName: "paleMapStyle", name: paleMapStyle, visibleName: "Pale Dawn", id: "mapPale" },
+    { styleName: "assinMapStyle", name: assinMapStyle, visibleName: "Assassin's Creed IV", id: "mapAssassin" },
+    { styleName: "appleMapStyle", name: appleMapStyle, visibleName: "Apple Maps-esque", id: "mapApple" },
+    { styleName: "grayMapStyle", name: grayMapStyle, visibleName: "Shades of Grey", id: "mapShades" },
+    { styleName: "natureMapStyle", name: natureMapStyle, visibleName: "Nature", id: "mapNature" },
+    { styleName: "bentleyMapStyle", name: bentleyMapStyle, visibleName: "Bentley", id: "mapBentley" },
+    { styleName: "cobaltMapStyle", name: cobaltMapStyle, visibleName: "Cobalt custom", id: "mapCobalt" },
+    { styleName: "sinCityMapStyle", name: sinCityMapStyle, visibleName: "Sin City", id: "mapSinCity" },
+    { styleName: "redMapStyle", name: redMapStyle, visibleName: "Red Map", id: "mapRed" },
+    { styleName: "lightMonochromeMapStyle", name: lightMonochromeMapStyle, visibleName: "Light Monochrome Bluish", id: "mapLightMonochrome" },
+    { styleName: "lightGreenMapStyle", name: lightGreenMapStyle, visibleName: "Light Green", id: "mapGreen" },
+]
+//google pins array/ image names
+var pinsTab = [
+    "pin0",
+    "pin1",
+    "pin2",
+    "pin3",
+    "pin4",
+    "pin5",
+    "pin6",
+    "pin7",
+    "pin8",
+    "pin9",
+    "pin10",
+    "pin11",
+    "pin12",
+]

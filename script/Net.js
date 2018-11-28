@@ -72,6 +72,47 @@ $(document).ready(function () {
             $("#info").html("Uzupełnij wymagane pola");
         }
     });
+
+    $("#recoverySubmit").on("click", function () {
+        console.log($("#recoverySubmit"))
+        if ($("#recoveryInputEmail")[0].value.length > 0 && $("#recoveryInputName")[0].value.length > 0) {
+            $("#loginInfo").html("");
+            var newPass = '';
+            for (var i = 0; i < 10; i++) {
+                newPass += (Math.floor(Math.random() * 100) + 1).toString();
+            }
+            console.log("new pass ===> ", newPass);
+            var e = $("#recoveryInputEmail")[0].value;
+            var name = $("#recoveryInputName")[0].value;
+            console.log(e, name);
+            $.ajax({
+                url: "php/PHPMailer/src/RecoveryPassword.php",
+                data: { email: e, name: name, pass: newPass },
+                type: "POST",
+                success: function (data) {
+                    var obj = data;
+                    console.log(obj);
+                    if (obj == "mistake")
+                        $("#recoveryInfo").html("Podane dane są niepoprawne");
+                    else if (obj == "yup") {
+                        $("#recoveryInfo").html("Hasło zostało zresetowane, nowe hasło zostało wysłane na podany email");
+                        setTimeout(function () {
+                            $("#login").animate({ right: "-120%" }, 500);
+                        }, 1500);
+                    }
+                    else if (obj == "no")
+                        $("#recoveryInfo").html("Nie udało się zmienić hasła :(");
+                },
+                error: function (xhr, status, error) {
+                },
+            });
+        }
+        else {
+            $("#info").html("Uzupełnij wymagane pola");
+        }
+    });
+
+
 });
 
 function getCookie(name) {
