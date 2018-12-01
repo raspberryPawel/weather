@@ -54,7 +54,7 @@ if (isset($_POST['name'], $_POST['email'])) {
                 Operacja zmianny hasła została zakończona powodzeniem, Twoje nowe hasło to: ' . $password . ' 
                 Zaloguj się w serwisie i zmień hasło w zakładce Ustawienia Konta.   
                 ';
-                $mail->AddAddress("niezapomne1234@interia.pl", "Paweł Malina");
+                $mail->AddAddress($email, "Paweł Malina");
                 if ($mail->Send()) {
                     echo 'yup';
                 } else {

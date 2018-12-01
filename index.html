@@ -17,8 +17,8 @@
   <link rel="stylesheet" href="style/navStyle.css">
   <link rel="stylesheet" href="style/adminPage.css">
   <link rel="stylesheet" href="style/weatherStyle.css">
-  <!-- Our Custom CSS -->
-  <link rel="stylesheet" href="style2.css">
+  <link rel="stylesheet" href="style/contact.css">
+  <link rel="stylesheet" href="style/rwd.css">
   <!-- Scrollbar Custom CSS -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.min.css">
   <!-- script -->
@@ -32,10 +32,6 @@
   <script src="script/Net.js"></script>
   <script src="script/init.js"></script>
   <script src="script/UI.js"></script>
-  <!-- Our Custom CSS -->
-  <link rel="stylesheet" href="style2.css">
-  <!-- Scrollbar Custom CSS -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.min.css">
   <!-- font -->
   <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
@@ -84,7 +80,7 @@
         <div id="register">Zarejestruj</div>
       </li>
       <li>
-        <div>Kontakt</div>
+        <div class="contactForm">Kontakt</div>
       </li>
     </ul>
     <ul id="online">
@@ -95,7 +91,7 @@
         <div id="logout">Wyloguj</a>
       </li>
       <li>
-        <div>Kontakt</a>
+        <div class="contactForm">Kontakt</a>
       </li>
     </ul>
   </nav>
@@ -103,11 +99,11 @@
     <i id="loginCancel" class="fas fa-times" style="display: block;"></i>
     <div class="container">
       <div class="Login">
-        <div class="form-group">
-          <input type="email" class="form-control" id="inputEmail" placeholder="Adres Email">
+        <div class="formGroup">
+          <input type="email" class="formControl" id="inputEmail" placeholder="Adres Email">
         </div>
-        <div class="form-group">
-          <input type="password" class="form-control" id="inputPassword" placeholder="Hasło">
+        <div class="formGroup">
+          <input type="password" class="formControl" id="inputPassword" placeholder="Hasło">
         </div>
         <div class="forgot">
           <div id="forgotPassword">Forgot password?</div>
@@ -122,18 +118,18 @@
     <i id="registerCancel" class="fas fa-times" style="display: block;"></i>
     <div class="container">
       <div class="Login">
-        <div class="form-group">
-          <input type="Text" id="registerName" class="form-control" placeholder="Imie i Nazwisko">
+        <div class="formGroup">
+          <input type="Text" id="registerName" class="formControl" placeholder="Imie i Nazwisko">
         </div>
-        <div class="form-group">
-          <input type="email" id="registerEmail" class="form-control" placeholder="Adres Email" title="Adres email jest nieprawidłowy">
+        <div class="formGroup">
+          <input type="email" id="registerEmail" class="formControl" placeholder="Adres Email" title="Adres email jest nieprawidłowy">
         </div>
-        <div class="form-group">
-          <input type="password" id="registerPassword" class="form-control" pattern="(.{3}).+" data-toggle="tooltip"
+        <div class="formGroup">
+          <input type="password" id="registerPassword" class="formControl" pattern="(.{3}).+" data-toggle="tooltip"
             title="Hasło powinno zawierać więcej niż 3 litery" placeholder="Hasło">
         </div>
-        <div class="form-group">
-          <input type="password" id="registerPasswordRepeat" class="form-control" pattern="(.{3}).+" data-toggle="tooltip"
+        <div class="formGroup">
+          <input type="password" id="registerPasswordRepeat" class="formControl" pattern="(.{3}).+" data-toggle="tooltip"
             title="Hasło powinno zawierać więcej niż 3 litery" placeholder="Powtorz hasło">
         </div>
         <button type="submit" id="registerSubmit" class="btn btn-primary">Zarejestruj</button>
@@ -178,11 +174,11 @@
     <i id="recoveryPasswordCancel" class="fas fa-times" style="display: block;"></i>
     <div class="container">
       <div class="Login">
-        <div class="form-group">
-          <input type="email" class="form-control" id="recoveryInputEmail" placeholder="Adres Email">
+        <div class="formGroup">
+          <input type="email" class="formControl" id="recoveryInputEmail" placeholder="Adres Email">
         </div>
-        <div class="form-group">
-          <input type="text" class="form-control" id="recoveryInputName" placeholder="Imię i Nazwisko">
+        <div class="formGroup">
+          <input type="text" class="formControl" id="recoveryInputName" placeholder="Imię i Nazwisko">
         </div>
         <button type="submit" id="recoverySubmit" class="btn btn-primary">Odzyskaj Hasło</button>
         <div id="recoveryInfo" style="text-align: center; padding: 10px;"></div>
@@ -193,6 +189,32 @@
   <div id="positionInfo">
     <h1 id="posInfo">Określamy Twoją lokalizację</h1>
     <i class="fas fa-spinner"></i>
+  </div>
+
+  <div id="contact">
+    <i id="contactCancel" class="fas fa-times" style="display: block;"></i>
+    <h1>Skontaktuj się ze mną</h1>
+    <h2>Każdy pomysł lub błąd, o którym wiesz, ma dla mnie ogromne znaczenie!</h2>
+    <i id="spiner" class="fas fa-spinner"></i>
+    <div id="info">
+      <i class="icon-cancel" id="infoButton"></i>
+      <div id="infoContent"></div>
+    </div>
+    <div id="form">
+      <div class="label">
+        <input id="contactName" type="text" placeholder="Imie i Nazwisko">
+      </div>
+      <div class="label">
+        <input id="contactEmail" type="email" placeholder="Adres E-mail">
+      </div>
+      <div class="label">
+        <input id="contactPhone" type="phone" placeholder="Telefon kontaktowy">
+      </div>
+      <div class="label">
+        <textarea name="Messagearea" id="contactMessagearea" cols="30" rows="10" placeholder="Wiadomość"></textarea>
+      </div>
+      <button id="send">Wyślij</button>
+    </div>
   </div>
 </body>
 

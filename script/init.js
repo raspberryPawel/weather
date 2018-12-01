@@ -1,5 +1,7 @@
 var mapStyleName = grayMapStyle;
 var control = true;
+var sign = ['ą', 'ć', 'ę', 'ł', 'ń', 'ó', 'ś', 'ź', 'ż', ' '];
+var signUTF = ['%C4%85 ', '%C4%87 ', '%C4%99', '%C5%82', '%C5%84', '%C3%B3', '%C5%9B', '%C5%BA', '%C5%BC', '%20'];
 $(document).ready(function () {
     getCookieMapStyle();
     $("#loc").on("click", function () {
@@ -11,71 +13,81 @@ $(document).ready(function () {
         control = false;
         getLocation();
     });
-    var sign = ['ą', 'ć', 'ę', 'ł', 'ń', 'ó', 'ś', 'ź', 'ż', ' '];
-    var signUTF = ['%C4%85 ', '%C4%87 ', '%C4%99', '%C5%82', '%C5%84', '%C3%B3', '%C5%9B', '%C5%BA', '%C5%BC', '%20'];
+   
     $("#search").on("input", function () {
-        $("#searchAutoComplete")
-            .empty()
-            .css("height", "0px")
-            .css("padding", "0 0 0 0");
         let toSearch = this.value;
-        let newSearch = repleacePolishLetters(sign, signUTF, toSearch);
-
-        $.ajax({
-            url: "php/AutoCompleteSearch.php",
-            data: { search: newSearch },
-            type: "POST",
-            success: function (data) {
-                var obj = JSON.parse(JSON.parse(data));
-                console.log("obj ", obj.Message);
-                if (obj.Message == "The allowed number of requests has been exceeded.") {
-                    console.log("wyczerpano liczbę użyć  klucza");
-                }
-                else {
-                    var optionLength;
-                    if (obj.length > 5)
-                        optionLength = 5;
-                    else
-                        optionLength = obj.length;
-
-                    var length = 0;
-                    for (var i = 0; i < optionLength; i++) {
-                        //console.log("super element ====>  ",obj[i]);
-                        let div = $("<div>")
-                            .attr("class", "completeOption")
-                            .attr("key", obj[i].Key)
-                            .html(obj[i].LocalizedName + ", " + obj[i].AdministrativeArea.LocalizedName + ", " + obj[i].Country.LocalizedName)
-                            .on("click", optionClick);
-                        //length += 50;
-                        $("#searchAutoComplete")
-                            .append(div)
-                            .css("transition", "1s")
-                            .css("padding", "16px 0 8px 0px")
-                            .css("height", "auto");
-                    }
-                }
-            },
-            error: function (xhr, status, error) {
-                //console.log(xhr);
-            },
-        });
+        searchFocusClick(toSearch)
     });
 
-    function optionClick() {
-        getCookieMapStyle();
-        $("#searchAutoComplete")
-            .css("transition", "1s")
-            .css("height", "0px")
-            .css("padding", "0 0 0 0");
-        var city = this.innerHTML.split(",")[0];
-        $("#search").val(city);
-        let toSearch = this.attributes.key.value;
-        lastSearch(city, toSearch);
-        getWeatherFromKey(toSearch)
-    }
+    $("#search").on("click", function () {
+        let toSearch = this.value;
+        searchFocusClick(toSearch)
+    });
+
+   
     setTimeout(function () { initMap("52.232", "21.007", 5, "map", mapStyleName, true, 1); }, 1000)
 });
+function optionClick() {
+    getCookieMapStyle();
+    $("#searchAutoComplete")
+        .css("transition", "1s")
+        .css("height", "0px")
+        .css("padding", "0 0 0 0");
+    var city = this.innerHTML.split(",")[0];
+    $("#search").val(city);
+    let toSearch = this.attributes.key.value;
+    lastSearch(city, toSearch);
+    getWeatherFromKey(toSearch)
+}
 
+function searchFocusClick(toSearch) {
+
+    $("#searchAutoComplete")
+        .empty()
+        .css("height", "0px")
+        .css("padding", "0 0 0 0");
+    let newSearch = repleacePolishLetters(sign, signUTF, toSearch);
+
+    $.ajax({
+        url: "php/AutoCompleteSearch.php",
+        data: { search: newSearch },
+        type: "POST",
+        success: function (data) {
+            var obj = JSON.parse(JSON.parse(data));
+            console.log("obj ", obj.Message);
+            if (obj.Message == "The allowed number of requests has been exceeded.") {
+                console.log("wyczerpano liczbę użyć  klucza");
+            }
+            else {
+                var optionLength;
+                if (obj.length > 5)
+                    optionLength = 5;
+                else
+                    optionLength = obj.length;
+
+                var length = 0;
+                for (var i = 0; i < optionLength; i++) {
+                    //console.log("super element ====>  ",obj[i]);
+                    let div = $("<div>")
+                        .attr("class", "completeOption")
+                        .attr("key", obj[i].Key)
+                        .html(obj[i].LocalizedName + ", " + obj[i].AdministrativeArea.LocalizedName + ", " + obj[i].Country.LocalizedName)
+                        .on("click", optionClick);
+                    //length += 50;
+                    $("#searchAutoComplete")
+                        .append(div)
+                        .css("transition", "1s")
+                        .css("padding", "16px 0 8px 0px")
+                        .css("height", "auto");
+                }
+            }
+        },
+        error: function (xhr, status, error) {
+            //console.log(xhr);
+        },
+    });
+
+}
 
 function getCookieMapStyle() {
     var x = getCookie('mapStyle');
@@ -139,6 +151,7 @@ function getLocation() {
     if (navigator.geolocation) {
         $("#positionInfo")
             .css("display", "flex");
+        console.log("pozycja");
         navigator.geolocation.getCurrentPosition(showPosition);
     } else {
         console.log("Geolocation is not supported by this browser.");
@@ -228,10 +241,10 @@ function getPositionFromLatLon(newSearch) {
     });
 }
 
-function getWeatherFromKey(toSearch){
+function getWeatherFromKey(toSearch) {
     $.ajax({
         url: "php/getLocation.php",
-        data: { search: toSearch},
+        data: { search: toSearch },
         type: "POST",
         success: function (data) {
             var obj = JSON.parse(JSON.parse(data));

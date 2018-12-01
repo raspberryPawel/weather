@@ -1,4 +1,3 @@
-
 #search {
     line-height: 0;
     font-size: 17px;
@@ -20,7 +19,6 @@
     border: 0;
 }
 
-
 #loc, #save {
     position: absolute;
     z-index: 99;
@@ -36,7 +34,7 @@
     color: rgba(0, 0, 0, 0.95)
 }
 
-#save{
+#save {
     right: 60px;
 }
 
@@ -76,4 +74,5 @@
     color: black;
     margin-top: -18px;
     border-radius: 0px 0px 25px 25px;
+    position: relative;
 }

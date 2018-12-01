@@ -73,6 +73,28 @@ $(document).ready(function () {
         $("#forgotPasswordPanel").animate({ right: "-120%" }, 1000);
     });
 
+    //show contact panel
+    $(".contactForm").on("click", function () {
+        click = show_Menu(click);
+        $("#contact").css("z-index", "199");
+        $("#contact").animate({ opacity: "1" }, 1000);
+        $("#contact").animate({ right: "0px" }, 1000);
+    });
+    //hide contact panel
+    $("#contactCancel").on("click", function () {
+        $("#contact").animate({ right: "-300%" }, 1000);
+        $("#contact").animate({ opacity: "0" }, 1000);
+        setTimeout(function () {
+            $("#contact").css("z-index", "-1");
+        }, 1000);
+    });
+
+    // wysyłanie wiadomości 
+    $("#send").on("click", function () {
+        $("#spiner").css("display", "block");
+        console.log("ślę");
+        send();
+    });
     //select google map design
     mapDesignClick();
     //select google map pin design
@@ -115,7 +137,7 @@ function changePasswordClick() {
 
 function mapDesignClick() {
     $("#design").on("click", function () {
-       $("#adminPage nav").animate({ left: "-300px" }, 100);
+        $("#adminPage nav").animate({ left: "-300px" }, 100);
         $("#content")
             .empty()
             .html("<h1>Design mapy:</h1>");
@@ -154,7 +176,7 @@ function mapDesignClick() {
 
 function designGooglePinsClick() {
     $("#pinDesign").on("click", function () {
-       $("#adminPage nav").animate({ left: "-300px" }, 100);
+        $("#adminPage nav").animate({ left: "-300px" }, 100);
         $("#content")
             .empty()
             .html("<h1>Design pinezki:</h1>");
@@ -184,7 +206,7 @@ function designGooglePinsClick() {
 
 function savePOsitionClick() {
     $("#savePosition").on("click", function () {
-       $("#adminPage nav").animate({ left: "-300px" }, 100);
+        $("#adminPage nav").animate({ left: "-300px" }, 100);
         $("#content").empty();
         var map = $("<div>")
             .attr("id", "savePositionMap");
@@ -207,7 +229,7 @@ function savePOsitionClick() {
 
 function userSettingsClick() {
     $("#userSettings").on("click", function () {
-       $("#adminPage nav").animate({ left: "-300px" }, 100);
+        $("#adminPage nav").animate({ left: "-300px" }, 100);
         $("#content")
             .empty()
             .html("<h1>Ustawienia użytkownika:</h1>");
@@ -234,7 +256,7 @@ function userSettingsClick() {
 
 function lastSearchClick() {
     $("#lastSearch").on("click", function () {
-       $("#adminPage nav").animate({ left: "-300px" }, 100);
+        $("#adminPage nav").animate({ left: "-300px" }, 100);
         $("#content").empty();
         var id = getCookie('userID');
         $.ajax({

@@ -149,3 +149,45 @@ function setCookie(key, value, expireDays, expireHours, expireMinutes, expireSec
 function deleteCookie(name) {
     setCookie(name, "", null, null, null, 1);
 }
+
+function send() {
+    var Name = $("#contactName").val();
+    var Email = $("#contactEmail").val();
+    var Phone = $("#contactPhone").val();
+    var Message = $("#contactMessagearea").val();
+    $(".icon-spin1").css("display", "block");
+    $("#info").css("display", "block");
+    $.ajax({
+        url: "php/PHPMailer/src/send.php",
+        data: { name: Name, email: Email, message: Message, phone: Phone },
+        type: "POST",
+        success: function (data) {
+            $(".icon-spin1").css("display", "none");
+            if (data == "ok") {
+                $("#infoContent").empty();
+                $("#infoContent").html("Wiadomość wysłana");
+                $("#info").css("display", "block");
+                $("#contactName").val("");
+                $("#contactEmail").val("");
+                $("#contactPhone").val("");
+                $("#contactMessagearea").val("");
+                $("#spiner").css("display", "none");
+                setTimeout(function () {
+                    $("#contact").animate({ right: "-300%" }, 1000);
+                    $("#contact").animate({ opacity: "0" }, 1000);
+                    setTimeout(function () {
+                        $("#contact").css("z-index", "-1");
+                    }, 1000);
+                }, 1000);
+            }
+            else {
+                $("#infoContent").empty();
+                $("#infoContent").html("Bład");
+                $("#info").css("display", "block");
+            }
+        },
+        error: function (xhr, status, error) {
+            //console.log(xhr);
+        },
+    });
+}

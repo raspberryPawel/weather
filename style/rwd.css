@@ -1,0 +1,63 @@
+@media only screen and (max-width: 600px) {
+    #search, #searchAutoComplete {
+        width: 90%;
+        left: -20px;
+    }
+    #loc {
+        right: 65px;
+    }
+    #save {
+        right: 95px;
+    }
+    #menu-button {
+        right: 1%;
+    }
+    .mapContainer {
+        width: 90%;
+        margin: 2vh auto;
+        min-width: unset;
+        height: 40%;
+    }
+    #content {
+        width: 110%;
+        margin: 5% auto 0 -5%;
+    }
+    #content h1 {
+        width: 90%;
+    }
+    .formControl {
+        width: 100%;
+        padding: 1%;
+    }
+    .formGroup, .btn {
+        width: 120% !important;
+        margin: 0 auto 10px -10%;
+    }
+    #form {
+        width: 100%;
+        margin: 0;
+    }
+}
+.formControl {
+    width: 100%;
+    padding: 1%;
+}
+.formGroup, .btn {
+    width: 120% !important;
+    margin: 0 auto 10px -10%;
+}
+
+@media only screen and (min-width: 600px) and (max-width: 1200px) {
+    #form {
+        width: 60%;
+        margin: 0;
+    }
+}
+
+@media only screen and (min-width: 800px) and (max-width: 1200px) {
+
+}
+
+@media only screen and (min-width: 600px) and (max-width: 800px) {
+    
+}
