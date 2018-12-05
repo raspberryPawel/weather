@@ -1,5 +1,4 @@
 function initMap(latitude, longitude, zoomVal, id, mapStyle, controlMap, positionObject) {
-    //var myLatLng = { lat: latitude, lng: longitude };
     var pinName = getCookie('pinName');
     var myLatLng = new google.maps.LatLng(parseFloat(latitude), parseFloat(longitude));
     console.log("inicjuje mapę");

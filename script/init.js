@@ -1,19 +1,16 @@
 var mapStyleName = grayMapStyle;
-var control = true;
-var sign = ['ą', 'ć', 'ę', 'ł', 'ń', 'ó', 'ś', 'ź', 'ż', ' '];
-var signUTF = ['%C4%85 ', '%C4%87 ', '%C4%99', '%C5%82', '%C5%84', '%C3%B3', '%C5%9B', '%C5%BA', '%C5%BC', '%20'];
 $(document).ready(function () {
     getCookieMapStyle();
     $("#loc").on("click", function () {
-        control = true;
+        Settings.control = true;
         getLocation();
     });
 
     $("#save").on("click", function () {
-        control = false;
+        Settings.control = false;
         getLocation();
     });
-   
+
     $("#search").on("input", function () {
         let toSearch = this.value;
         searchFocusClick(toSearch)
@@ -24,7 +21,7 @@ $(document).ready(function () {
         searchFocusClick(toSearch)
     });
 
-   
+
     setTimeout(function () { initMap("52.232", "21.007", 5, "map", mapStyleName, true, 1); }, 1000)
 });
 function optionClick() {
@@ -46,7 +43,7 @@ function searchFocusClick(toSearch) {
         .empty()
         .css("height", "0px")
         .css("padding", "0 0 0 0");
-    let newSearch = repleacePolishLetters(sign, signUTF, toSearch);
+    let newSearch = repleacePolishLetters(Settings.sign, Settings.signUTF, toSearch);
 
     $.ajax({
         url: "php/AutoCompleteSearch.php",
@@ -54,9 +51,19 @@ function searchFocusClick(toSearch) {
         type: "POST",
         success: function (data) {
             var obj = JSON.parse(JSON.parse(data));
-            console.log("obj ", obj.Message);
             if (obj.Message == "The allowed number of requests has been exceeded.") {
-                console.log("wyczerpano liczbę użyć  klucza");
+                $("#positionInfo div")
+                    .css("opacity", "0");
+                $("#positionInfo h1")
+                    .html("Wyczerpano liczbę użyć  klucza API");
+                $("#positionInfo").animate({ right: "0%" }, 500);
+            }
+            else if (obj.Message == "Api Authorization failed") {
+                $("#positionInfo div")
+                    .css("opacity", "0");
+                $("#positionInfo h1")
+                    .html("Api Authorization failed");
+                $("#positionInfo").animate({ right: "0%" }, 500);
             }
             else {
                 var optionLength;
@@ -67,13 +74,11 @@ function searchFocusClick(toSearch) {
 
                 var length = 0;
                 for (var i = 0; i < optionLength; i++) {
-                    //console.log("super element ====>  ",obj[i]);
                     let div = $("<div>")
                         .attr("class", "completeOption")
                         .attr("key", obj[i].Key)
                         .html(obj[i].LocalizedName + ", " + obj[i].AdministrativeArea.LocalizedName + ", " + obj[i].Country.LocalizedName)
                         .on("click", optionClick);
-                    //length += 50;
                     $("#searchAutoComplete")
                         .append(div)
                         .css("transition", "1s")
@@ -91,7 +96,6 @@ function searchFocusClick(toSearch) {
 
 function getCookieMapStyle() {
     var x = getCookie('mapStyle');
-    console.log("ciasteczko: ", x);
     if (x != null || x != "") {
         mapStyleName = window[x];
     }
@@ -148,23 +152,31 @@ function repleacePolishLetters(sign, signUTF, toSearch) {
 
 
 function getLocation() {
+    $("#positionInfo div")
+        .css("opacity", "1");
+    $("#positionInfo h1")
+        .html("Określamy Twoją lokalizację");
     if (navigator.geolocation) {
-        $("#positionInfo")
-            .css("display", "flex");
-        console.log("pozycja");
+        $("#positionInfo").animate({ right: "0%" }, 500);
         navigator.geolocation.getCurrentPosition(showPosition);
+        setTimeout(function () {
+            $("#posInfo")
+                .html("Przykro mi, wystąpił błąd z lokalizacją na Twoim urządzeniu. <br> Spróbuj ponownie");
+            $("#positionInfo div")
+                .css("transition", "1s")
+                .css("opacity", "0");
+            setTimeout(function () {
+                $("#positionInfo").animate({ right: "-300%" }, 1000);
+            }, 1500);
+        }, 15000);
     } else {
-        console.log("Geolocation is not supported by this browser.");
         $("#posInfo")
             .html("Twoja przeglądarka nie wspiera usługi lokalizacji, zostanie ona określona na podstawie adresu IP dostawcy Twojego internetu.");
-        $("#positionInfo")
-            .css("display", "flex");
+        $("#positionInfo").animate({ right: "0%" }, 1000);
         $.getJSON('http://ip-api.com/json?callback=?', function (data) {
-            console.log(JSON.stringify(data, null, 2));
             var position = data;
             var newSearch = position.lat + "," + position.lon;
-            console.log(control, " <=========control");
-            if (control)
+            if (Settings.control)
                 getPositionFromLatLon(newSearch)
             else
                 savePosition(position.lat, position.lon)
@@ -181,10 +193,8 @@ function savePosition(lat, lon) {
             type: "POST",
             success: function (data) {
                 var obj = JSON.parse(JSON.parse(data));
-                console.log("obj ", obj);
                 if (obj == true) {
-                    $("#positionInfo")
-                        .css("display", "none");
+                    $("#positionInfo").animate({ right: "-300%" }, 1000);
                 }
                 else {
                     console.log("wystąpił nieoczekiwany błąd z bazą danych");
@@ -203,8 +213,7 @@ function savePosition(lat, lon) {
 
 function showPosition(position) {
     var newSearch = position.coords.latitude + "," + position.coords.longitude;
-    console.log(newSearch);
-    if (control)
+    if (Settings.control)
         getPositionFromLatLon(newSearch)
     else
         savePosition(position.coords.latitude, position.coords.longitude)
@@ -218,21 +227,27 @@ function getPositionFromLatLon(newSearch) {
         type: "POST",
         success: function (data) {
             var obj = JSON.parse(JSON.parse(data));
-            console.log("obj ", obj);
             if (obj.Message == "The allowed number of requests has been exceeded.") {
-                console.log("wyczerpano liczbę użyć  klucza");
+                $("#positionInfo div")
+                    .css("opacity", "0");
+                $("#positionInfo h1")
+                    .html("Wyczerpano liczbę użyć  klucza API");
+                $("#positionInfo").animate({ right: "0%" }, 500);
+            }
+            else if (obj.Message == "Api Authorization failed") {
+                $("#positionInfo div")
+                    .css("opacity", "0");
+                $("#positionInfo h1")
+                    .html("Api Authorization failed");
+                $("#positionInfo").animate({ right: "0%" }, 500);
             }
             else {
-                console.log("key======> " + obj.LocalizedName);
-                console.log("obj======> " + obj.Key);
-                console.log("long======> " + obj.GeoPosition.Longitude);
                 $("#search").val(obj.LocalizedName);
                 initMap(obj.GeoPosition.Latitude, obj.GeoPosition.Longitude, 13, "map", mapStyleName, true, 1);
                 createWeatherContainer();
                 getWeather(obj.Key);
                 lastSearch(obj.LocalizedName, obj.Key)
-                $("#positionInfo")
-                    .css("display", "none");
+                $("#positionInfo").animate({ right: "-300%" }, 1000);
             }
         },
         error: function (xhr, status, error) {
@@ -250,7 +265,6 @@ function getWeatherFromKey(toSearch) {
             var obj = JSON.parse(JSON.parse(data));
             $("#searchAutoComplete").empty();
             initMap(obj.GeoPosition.Latitude, obj.GeoPosition.Longitude, 13, "map", mapStyleName, true, 1);
-            //console.log(obj.GeoPosition.Latitude, obj.GeoPosition.Longitude);
             createWeatherContainer();
             getWeather(toSearch);
             $("#adminPage").animate({ right: "-120%" }, 500);
@@ -271,7 +285,6 @@ function lastSearch(city, toSearch) {
             var obj = JSON.parse(JSON.parse(data));
             $("#searchAutoComplete").empty();
             initMap(obj.GeoPosition.Latitude, obj.GeoPosition.Longitude, 13, "map", mapStyleName, true, 1);
-            //console.log(obj.GeoPosition.Latitude, obj.GeoPosition.Longitude);
             createWeatherContainer();
             getWeather(toSearch);
         },

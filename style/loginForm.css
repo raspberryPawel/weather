@@ -31,6 +31,14 @@
 
 .Login .formGroup {
     margin-bottom: 10px;
+    position: relative;
+}
+
+.formGroup i {
+    position: absolute;
+    font-size: 25px;
+    left: -30px;
+    top: 10px;
 }
 
 .forgot div {

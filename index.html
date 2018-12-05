@@ -26,9 +26,11 @@
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
   <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDaZwpc5qZXFmbTwGjjy41i-FuggEaJHF4&callback=initMap"
     async defer></script>
+  <script src="script/Settings.js"></script>
   <script src="script/mapStyle.js"></script>
   <script src="script/map.js"></script>
   <script src="script/getWeather.js"></script>
+  <script src="script/getWeatherFunctions.js"></script>
   <script src="script/Net.js"></script>
   <script src="script/init.js"></script>
   <script src="script/UI.js"></script>
@@ -100,10 +102,10 @@
     <div class="container">
       <div class="Login">
         <div class="formGroup">
-          <input type="email" class="formControl" id="inputEmail" placeholder="Adres Email">
+          <i class="fas fa-user"></i><input type="email" class="formControl" id="inputEmail" placeholder="Adres Email">
         </div>
         <div class="formGroup">
-          <input type="password" class="formControl" id="inputPassword" placeholder="Hasło">
+          <i class="fas fa-lock"></i><input type="password" class="formControl" id="inputPassword" placeholder="Hasło">
         </div>
         <div class="forgot">
           <div id="forgotPassword">Forgot password?</div>
@@ -188,7 +190,7 @@
 
   <div id="positionInfo">
     <h1 id="posInfo">Określamy Twoją lokalizację</h1>
-    <i class="fas fa-spinner"></i>
+    <div><i class="fas fa-spinner"></i></div>
   </div>
 
   <div id="contact">
@@ -196,10 +198,6 @@
     <h1>Skontaktuj się ze mną</h1>
     <h2>Każdy pomysł lub błąd, o którym wiesz, ma dla mnie ogromne znaczenie!</h2>
     <i id="spiner" class="fas fa-spinner"></i>
-    <div id="info">
-      <i class="icon-cancel" id="infoButton"></i>
-      <div id="infoContent"></div>
-    </div>
     <div id="form">
       <div class="label">
         <input id="contactName" type="text" placeholder="Imie i Nazwisko">
@@ -214,8 +212,12 @@
         <textarea name="Messagearea" id="contactMessagearea" cols="30" rows="10" placeholder="Wiadomość"></textarea>
       </div>
       <button id="send">Wyślij</button>
+      <div class="label">
+        <div id="infoContent"></div>
+      </div>
     </div>
   </div>
+
 </body>
 
 </html>

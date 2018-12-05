@@ -89,10 +89,9 @@ $(document).ready(function () {
         }, 1000);
     });
 
-    // wysyłanie wiadomości 
+    // send message
     $("#send").on("click", function () {
         $("#spiner").css("display", "block");
-        console.log("ślę");
         send();
     });
     //select google map design
@@ -236,7 +235,7 @@ function userSettingsClick() {
         var main = $("<div>");
         var div = $("<div>")
             .attr("class", "changePassword")
-            .html(' <div class="Login"><div class= "form-group"><input type="password" class="form-control" id="changePassword" placeholder="Nowe Hasło"></div><div class="form-group"><input type="password" class="form-control" id="changePasswordTwo" placeholder="Powtórz hasło"> </div><button type="submit" id="changePasswordSubmit" class="btn btn-primary">Zmień Hasło</button><div id="changePasswordInfo" style="text-align: center; padding: 10px;">chuj</div> </div>')
+            .html(' <div class="Login"><div class= "form-group"><input type="password" class="form-control" id="changePassword" placeholder="Nowe Hasło"></div><div class="form-group"><input type="password" class="form-control" id="changePasswordTwo" placeholder="Powtórz hasło"> </div><button type="submit" id="changePasswordSubmit" class="btn btn-primary">Zmień Hasło</button><div id="changePasswordInfo" style="text-align: center; padding: 10px;"></div> </div>')
             .css("display", "none");
 
         var container = $("<div>")
@@ -266,6 +265,7 @@ function lastSearchClick() {
             success: function (data) {
                 var obj = JSON.parse(data);
                 var ul = $("<ul>");
+                obj.splice(9, obj.length);
                 obj.forEach(element => {
                     var div = $("<li>")
                         .attr("class", "lastSearchOption")
@@ -273,7 +273,6 @@ function lastSearchClick() {
                         .attr("searchID", element.id)
                         .html(element.name)
                         .on("click", function () {
-                            //console.log(this);
                             getWeatherFromKey(this.attributes.key.value);
                             var city = this.innerHTML;
                             $("#search").val(city);
@@ -283,8 +282,6 @@ function lastSearchClick() {
                 $("#content")
                     .html("<h1>Ostatnio wyszukane:</h1>")
                     .append(ul);
-                //getCookieMapStyle();
-                //initMap("52.232", "21.007", 5, "savePositionMap", mapStyleName, false, obj);
             },
             error: function (xhr, status, error) {
             },

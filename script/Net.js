@@ -1,20 +1,17 @@
 $(document).ready(function () {
     $("#registerSubmit").on("click", function () {
-        console.log($("#registerPassword"))
         if ($("#registerPassword")[0].value.length > 0 && $("#registerEmail")[0].value.length > 0 && $("#registerName")[0].value.length > 0) {
             if ($("#registerPassword")[0].value == $("#registerPasswordRepeat")[0].value) {
                 $("#info").html("");
                 var n = $("#registerName")[0].value;
                 var e = $("#registerEmail")[0].value;
                 var pass = $("#registerPassword")[0].value;
-                console.log(n, e, pass);
                 $.ajax({
                     url: "php/Register.php",
                     data: { email: e, password: pass, name: n },
                     type: "POST",
                     success: function (data) {
                         var obj = data;
-                        console.log(obj);
                         if (obj == "mistake")
                             $("#info").html("Na podany email utworzono już konto");
                         else if (obj == "success") {
@@ -40,19 +37,16 @@ $(document).ready(function () {
     });
 
     $("#loginSubmit").on("click", function () {
-        console.log($("#loginSubmit"))
         if ($("#inputEmail")[0].value.length > 0 && $("#inputPassword")[0].value.length > 0) {
             $("#loginInfo").html("");
             var e = $("#inputEmail")[0].value;
             var pass = $("#inputPassword")[0].value;
-            console.log(e, pass);
             $.ajax({
                 url: "php/Login.php",
                 data: { email: e, password: pass },
                 type: "POST",
                 success: function (data) {
                     var obj = data;
-                    console.log(obj);
                     if (obj == "mistake")
                         $("#loginInfo").html("Podany email nie figuruje w naszej bazie");
                     else if (obj == "valid") {
@@ -74,24 +68,20 @@ $(document).ready(function () {
     });
 
     $("#recoverySubmit").on("click", function () {
-        console.log($("#recoverySubmit"))
         if ($("#recoveryInputEmail")[0].value.length > 0 && $("#recoveryInputName")[0].value.length > 0) {
             $("#loginInfo").html("");
             var newPass = '';
             for (var i = 0; i < 10; i++) {
                 newPass += (Math.floor(Math.random() * 100) + 1).toString();
             }
-            console.log("new pass ===> ", newPass);
             var e = $("#recoveryInputEmail")[0].value;
             var name = $("#recoveryInputName")[0].value;
-            console.log(e, name);
             $.ajax({
                 url: "php/PHPMailer/src/RecoveryPassword.php",
                 data: { email: e, name: name, pass: newPass },
                 type: "POST",
                 success: function (data) {
                     var obj = data;
-                    console.log(obj);
                     if (obj == "mistake")
                         $("#recoveryInfo").html("Podane dane są niepoprawne");
                     else if (obj == "yup") {
