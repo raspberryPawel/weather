@@ -112,22 +112,7 @@ function changePasswordClick() {
         var password1 = $("#changePassword")[0].value;
         var password2 = $("#changePasswordTwo")[0].value;
         if (password1 == password2) {
-            $.ajax({
-                url: "php/ChangePassword.php",
-                data: { userID: id, password: password1 },
-                type: "POST",
-                success: function (data) {
-                    var obj = data;
-                    if (obj == 1) {
-                        $("#changePasswordInfo").html("Hasło zostało zmienione");
-                    }
-                    else {
-                        $("#changePasswordInfo").html("Wystąpił błąd. Hasło nie zostało zmienione");
-                    }
-                },
-                error: function (xhr, status, error) {
-                },
-            });
+            changePasswordAjax(id, password1);
         }
         else
             $("#changePasswordInfo").html("Hasła nie są identyczne");
@@ -140,7 +125,7 @@ function mapDesignClick() {
         $("#content")
             .empty()
             .html("<h1>Design mapy:</h1>");
-        stylesTab.forEach(element => {
+        Settings.stylesTab.forEach(element => {
             var container = $("<div>")
                 .attr("class", "mapContainer")
                 .attr("mapName", element.styleName);
@@ -179,7 +164,7 @@ function designGooglePinsClick() {
         $("#content")
             .empty()
             .html("<h1>Design pinezki:</h1>");
-        pinsTab.forEach(element => {
+        Settings.pinsTab.forEach(element => {
             var container = $("<div>")
                 .attr("class", "pinsContainer")
                 .css("background-image", "url(images/GooglePinsBig/" + element + ".png)");
@@ -211,18 +196,7 @@ function savePOsitionClick() {
             .attr("id", "savePositionMap");
         $("#content").append(map);
         var id = getCookie('userID');
-        $.ajax({
-            url: "php/GetSavedPosition.php",
-            data: { userID: id, },
-            type: "POST",
-            success: function (data) {
-                var obj = JSON.parse(data);
-                getCookieMapStyle();
-                initMap("52.232", "21.007", 5, "savePositionMap", mapStyleName, false, obj);
-            },
-            error: function (xhr, status, error) {
-            },
-        });
+        GetSavedPositionAjax(id);
     });
 }
 
@@ -258,36 +232,10 @@ function lastSearchClick() {
         $("#adminPage nav").animate({ left: "-300px" }, 100);
         $("#content").empty();
         var id = getCookie('userID');
-        $.ajax({
-            url: "php/GetLastSearch.php",
-            data: { userID: id, },
-            type: "POST",
-            success: function (data) {
-                var obj = JSON.parse(data);
-                var ul = $("<ul>");
-                obj.splice(9, obj.length);
-                obj.forEach(element => {
-                    var div = $("<li>")
-                        .attr("class", "lastSearchOption")
-                        .attr("key", element.key)
-                        .attr("searchID", element.id)
-                        .html(element.name)
-                        .on("click", function () {
-                            getWeatherFromKey(this.attributes.key.value);
-                            var city = this.innerHTML;
-                            $("#search").val(city);
-                        });
-                    ul.append(div);
-                });
-                $("#content")
-                    .html("<h1>Ostatnio wyszukane:</h1>")
-                    .append(ul);
-            },
-            error: function (xhr, status, error) {
-            },
-        });
+        getLastSearchAjax(id);
     });
 }
+
 
 function show_Menu(click) {
     if ($("#menu-button").children()[0].style.display == "block") {
@@ -312,36 +260,3 @@ function show_Menu(click) {
     }
     return click;
 }
-
-//google map design array/ style var names
-var stylesTab = [
-    { styleName: "multiMapStyle", name: multiMapStyle, visibleName: "Multi Brand Network", id: "mapMulti" },
-    { styleName: "lightMapStyle", name: lightMapStyle, visibleName: "Light Grey", id: "mapLight" },
-    { styleName: "paleMapStyle", name: paleMapStyle, visibleName: "Pale Dawn", id: "mapPale" },
-    { styleName: "assinMapStyle", name: assinMapStyle, visibleName: "Assassin's Creed IV", id: "mapAssassin" },
-    { styleName: "appleMapStyle", name: appleMapStyle, visibleName: "Apple Maps-esque", id: "mapApple" },
-    { styleName: "grayMapStyle", name: grayMapStyle, visibleName: "Shades of Grey", id: "mapShades" },
-    { styleName: "natureMapStyle", name: natureMapStyle, visibleName: "Nature", id: "mapNature" },
-    { styleName: "bentleyMapStyle", name: bentleyMapStyle, visibleName: "Bentley", id: "mapBentley" },
-    { styleName: "cobaltMapStyle", name: cobaltMapStyle, visibleName: "Cobalt custom", id: "mapCobalt" },
-    { styleName: "sinCityMapStyle", name: sinCityMapStyle, visibleName: "Sin City", id: "mapSinCity" },
-    { styleName: "redMapStyle", name: redMapStyle, visibleName: "Red Map", id: "mapRed" },
-    { styleName: "lightMonochromeMapStyle", name: lightMonochromeMapStyle, visibleName: "Light Monochrome Bluish", id: "mapLightMonochrome" },
-    { styleName: "lightGreenMapStyle", name: lightGreenMapStyle, visibleName: "Light Green", id: "mapGreen" },
-]
-//google pins array/ image names
-var pinsTab = [
-    "pin0",
-    "pin1",
-    "pin2",
-    "pin3",
-    "pin4",
-    "pin5",
-    "pin6",
-    "pin7",
-    "pin8",
-    "pin9",
-    "pin10",
-    "pin11",
-    "pin12",
-]

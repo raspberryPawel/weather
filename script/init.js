@@ -21,7 +21,7 @@ $(document).ready(function () {
         searchFocusClick(toSearch)
     });
 
-
+    console.log("sett: ", Settings.days);
     setTimeout(function () { initMap("52.232", "21.007", 5, "map", mapStyleName, true, 1); }, 1000)
 });
 function optionClick() {
@@ -43,7 +43,7 @@ function searchFocusClick(toSearch) {
         .empty()
         .css("height", "0px")
         .css("padding", "0 0 0 0");
-    let newSearch = repleacePolishLetters(Settings.sign, Settings.signUTF, toSearch);
+    let newSearch = repleacePolishLetters(toSearch);
 
     $.ajax({
         url: "php/AutoCompleteSearch.php",
@@ -130,7 +130,9 @@ function createWeatherContainer() {
     $("#map").append(div);
 }
 
-function repleacePolishLetters(sign, signUTF, toSearch) {
+function repleacePolishLetters(toSearch) {
+    let sign = Settings.sign;
+    let signUTF = Settings.signUTF;
     toSearch = toSearch.toLowerCase();
     let newSearch = "";
     for (var i = 0; i < toSearch.length; i++) {

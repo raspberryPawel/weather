@@ -180,4 +180,73 @@ function send() {
             //console.log(xhr);
         },
     });
+    
+}
+
+//send ajax with password to change
+function changePasswordAjax(id, password1) {
+    $.ajax({
+        url: "php/ChangePassword.php",
+        data: { userID: id, password: password1 },
+        type: "POST",
+        success: function (data) {
+            var obj = data;
+            if (obj == 1) {
+                $("#changePasswordInfo").html("Hasło zostało zmienione");
+            }
+            else {
+                $("#changePasswordInfo").html("Wystąpił błąd. Hasło nie zostało zmienione");
+            }
+        },
+        error: function (xhr, status, error) {
+        },
+    });
+}
+
+//send ajax with user id to show position
+function GetSavedPositionAjax(id) {
+    $.ajax({
+        url: "php/GetSavedPosition.php",
+        data: { userID: id, },
+        type: "POST",
+        success: function (data) {
+            var obj = JSON.parse(data);
+            getCookieMapStyle();
+            initMap("52.232", "21.007", 5, "savePositionMap", mapStyleName, false, obj);
+        },
+        error: function (xhr, status, error) {
+        },
+    });
+}
+
+//send ajax with user id to show user Last search
+function getLastSearchAjax(id) {
+    $.ajax({
+        url: "php/GetLastSearch.php",
+        data: { userID: id, },
+        type: "POST",
+        success: function (data) {
+            var obj = JSON.parse(data);
+            var ul = $("<ul>");
+            obj.splice(9, obj.length);
+            obj.forEach(element => {
+                var div = $("<li>")
+                    .attr("class", "lastSearchOption")
+                    .attr("key", element.key)
+                    .attr("searchID", element.id)
+                    .html(element.name)
+                    .on("click", function () {
+                        getWeatherFromKey(this.attributes.key.value);
+                        var city = this.innerHTML;
+                        $("#search").val(city);
+                    });
+                ul.append(div);
+            });
+            $("#content")
+                .html("<h1>Ostatnio wyszukane:</h1>")
+                .append(ul);
+        },
+        error: function (xhr, status, error) {
+        },
+    });
 }
