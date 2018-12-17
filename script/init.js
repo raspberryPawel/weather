@@ -21,7 +21,7 @@ $(document).ready(function () {
         searchFocusClick(toSearch)
     });
 
-
+console.log("cos");
 
     var cityId = getCookie('defaultCity');
     if (cityId != null && cityId != "") {
