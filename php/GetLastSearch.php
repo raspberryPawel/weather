@@ -12,7 +12,7 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 } else {
     $conn->set_charset("utf8");
-    $sql = "SELECT * FROM `lastsearch` WHERE `userID` = " . $userID;
+    $sql = "SELECT DISTINCT `name`, `key` FROM `lastsearch` WHERE `userID` = " . $userID . " ORDER BY `lastsearch`.`searchID` DESC ";
     $result = $conn->query($sql);
     $positionTab = array();
         // array_push($tab, "ups");

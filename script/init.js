@@ -21,8 +21,16 @@ $(document).ready(function () {
         searchFocusClick(toSearch)
     });
 
-    console.log("sett: ", Settings.days);
-    setTimeout(function () { initMap("52.232", "21.007", 5, "map", mapStyleName, true, 1); }, 1000)
+
+
+    var cityId = getCookie('defaultCity');
+    if (cityId != null && cityId != "") {
+        getWeatherFromKey(cityId.split("%26")[0])
+    }
+    else {
+        setTimeout(function () { initMap("52.232", "21.007", 5, "map", mapStyleName, true, 1); }, 1000)
+    }
+
 });
 function optionClick() {
     getCookieMapStyle();
@@ -56,14 +64,14 @@ function searchFocusClick(toSearch) {
                     .css("opacity", "0");
                 $("#positionInfo h1")
                     .html("Wyczerpano liczbę użyć  klucza API");
-                $("#positionInfo").animate({ right: "0%" }, 500);
+                $("#positionInfo").css("display", "flex").animate({ width: "100%" }, 500);
             }
             else if (obj.Message == "Api Authorization failed") {
                 $("#positionInfo div")
                     .css("opacity", "0");
                 $("#positionInfo h1")
                     .html("Api Authorization failed");
-                $("#positionInfo").animate({ right: "0%" }, 500);
+                $("#positionInfo").css("display", "flex").animate({ width: "100%" }, 500);
             }
             else {
                 var optionLength;
@@ -96,7 +104,7 @@ function searchFocusClick(toSearch) {
 
 function getCookieMapStyle() {
     var x = getCookie('mapStyle');
-    if (x != null || x != "") {
+    if (x != null && x != "") {
         mapStyleName = window[x];
     }
     else {
@@ -149,6 +157,8 @@ function repleacePolishLetters(toSearch) {
         else
             newSearch += toSearch[i];
     }
+    newSearch.replace(/\+/g, '');
+    //console.log(newSearch, " <=====to to ");
     return newSearch;
 }
 
@@ -159,7 +169,7 @@ function getLocation() {
     $("#positionInfo h1")
         .html("Określamy Twoją lokalizację");
     if (navigator.geolocation) {
-        $("#positionInfo").animate({ right: "0%" }, 500);
+        $("#positionInfo").css("display", "flex").animate({ width: "100%" }, 500);
         navigator.geolocation.getCurrentPosition(showPosition);
         setTimeout(function () {
             $("#posInfo")
@@ -168,13 +178,16 @@ function getLocation() {
                 .css("transition", "1s")
                 .css("opacity", "0");
             setTimeout(function () {
-                $("#positionInfo").animate({ right: "-300%" }, 1000);
+                $("#positionInfo").animate({ width: "0%" }, 500);
+                setTimeout(function () {
+                    $("#positionInfo").css("display", "none");
+                }, 1000);
             }, 1500);
         }, 15000);
     } else {
         $("#posInfo")
             .html("Twoja przeglądarka nie wspiera usługi lokalizacji, zostanie ona określona na podstawie adresu IP dostawcy Twojego internetu.");
-        $("#positionInfo").animate({ right: "0%" }, 1000);
+        $("#positionInfo").animate({ width: "100%" }, 500);
         $.getJSON('http://ip-api.com/json?callback=?', function (data) {
             var position = data;
             var newSearch = position.lat + "," + position.lon;
@@ -265,11 +278,15 @@ function getWeatherFromKey(toSearch) {
         type: "POST",
         success: function (data) {
             var obj = JSON.parse(JSON.parse(data));
+            $("#search").val(obj.LocalizedName);
             $("#searchAutoComplete").empty();
             initMap(obj.GeoPosition.Latitude, obj.GeoPosition.Longitude, 13, "map", mapStyleName, true, 1);
             createWeatherContainer();
             getWeather(toSearch);
-            $("#adminPage").animate({ right: "-120%" }, 500);
+            $("#adminPage").animate({ width: "0%" }, 500);
+            setTimeout(function () {
+                $("#adminPage").css("display", "none");
+            }, 500);
         },
         error: function (xhr, status, error) {
             //console.log(xhr);

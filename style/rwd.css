@@ -2,15 +2,24 @@
     #search, #searchAutoComplete {
         width: 90%;
         left: -20px;
+        padding-left: 10px;
+        padding-right: 50px !important;
+        font-size: 90%;
     }
     #loc {
         right: 65px;
+        font-size: 170%;
+        top: 2px;
     }
     #save {
         right: 95px;
+        font-size: 170%;
+        top: 2px;
     }
     #menu-button {
         right: 1%;
+        width: 34px;
+        height: 34px;
     }
     .mapContainer {
         width: 90%;
@@ -21,6 +30,11 @@
     #content {
         width: 110%;
         margin: 5% auto 0 -5%;
+    }
+    .Login {
+        min-width: 200px !important;
+        width: 99% !important;
+        max-width: 100% !important;
     }
     #content h1 {
         width: 90%;
@@ -38,10 +52,12 @@
         margin: 0;
     }
 }
+
 .formControl {
     width: 100%;
     padding: 1%;
 }
+
 .formGroup, .btn {
     width: 120% !important;
     margin: 0 auto 10px -10%;
@@ -60,6 +76,4 @@
     }
 }
 
-@media only screen and (min-width: 600px) and (max-width: 800px) {
-    
-}
+@media only screen and (min-width: 600px) and (max-width: 800px) {}

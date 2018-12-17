@@ -17,7 +17,10 @@ $(document).ready(function () {
                         else if (obj == "success") {
                             $("#info").html("Gratulacje, konto zostało założone");
                             setTimeout(function () {
-                                $("#registerForm").animate({ right: "-120%" }, 500);
+                                $("#registerForm").animate({ width: "0%" }, 500);
+                                setTimeout(function () {
+                                    $("#registerForm").css("display", "none");
+                                }, 500);
                             }, 1500);
                         }
 
@@ -52,7 +55,10 @@ $(document).ready(function () {
                     else if (obj == "valid") {
                         $("#loginInfo").html("Zalogowano");
                         setTimeout(function () {
-                            $("#login").animate({ right: "-120%" }, 500);
+                            $("#login").animate({ width: "0%" }, 500);
+                            setTimeout(function () {
+                                $("#login").css("display", "none");
+                            }, 500);
                         }, 1500);
                     }
                     else if (obj == "invalidPassword")
@@ -87,11 +93,16 @@ $(document).ready(function () {
                     else if (obj == "yup") {
                         $("#recoveryInfo").html("Hasło zostało zresetowane, nowe hasło zostało wysłane na podany email");
                         setTimeout(function () {
-                            $("#login").animate({ right: "-120%" }, 500);
+                            $("#login").animate({ width: "0%" }, 500);
+                            setTimeout(function () {
+                                $("#login").css("display", "none");
+                            }, 500);
                         }, 1500);
                     }
                     else if (obj == "no")
                         $("#recoveryInfo").html("Nie udało się zmienić hasła :(");
+                    else
+                        $("#recoveryInfo").html(obj);
                 },
                 error: function (xhr, status, error) {
                 },
@@ -167,6 +178,9 @@ function send() {
                     $("#contact").animate({ opacity: "0" }, 1000);
                     setTimeout(function () {
                         $("#contact").css("z-index", "-1");
+                        setTimeout(function () {
+                            $("#contact").css("display", "none");
+                        }, 1000);
                     }, 1000);
                 }, 1000);
             }
@@ -180,7 +194,7 @@ function send() {
             //console.log(xhr);
         },
     });
-    
+
 }
 
 //send ajax with password to change
@@ -192,7 +206,9 @@ function changePasswordAjax(id, password1) {
         success: function (data) {
             var obj = data;
             if (obj == 1) {
-                $("#changePasswordInfo").html("Hasło zostało zmienione");
+                $("#changePasswordInfo").html("");
+                $("#snackbar").html("Zmieniono hasło").attr("class", "show");
+                setTimeout(function () { $("#snackbar").attr("class", ""); }, 3000);
             }
             else {
                 $("#changePasswordInfo").html("Wystąpił błąd. Hasło nie zostało zmienione");
@@ -221,14 +237,16 @@ function GetSavedPositionAjax(id) {
 
 //send ajax with user id to show user Last search
 function getLastSearchAjax(id) {
+    var userID = id;
     $.ajax({
         url: "php/GetLastSearch.php",
-        data: { userID: id, },
+        data: { userID: userID, },
         type: "POST",
         success: function (data) {
             var obj = JSON.parse(data);
             var ul = $("<ul>");
             obj.splice(9, obj.length);
+            var cityId = getCookie('defaultCity');
             obj.forEach(element => {
                 var div = $("<li>")
                     .attr("class", "lastSearchOption")
@@ -238,8 +256,30 @@ function getLastSearchAjax(id) {
                     .on("click", function () {
                         getWeatherFromKey(this.attributes.key.value);
                         var city = this.innerHTML;
-                        $("#search").val(city);
+                        $("#search").val(element.name);
                     });
+                if (cityId != null && cityId != "" && element.key == cityId.split("%26")[0])
+                    var color = "#e5c163";
+                else
+                    var color = "#000000";
+                var icon = $("<i>")
+                    .attr("class", "fas fa-save lastSearchButton")
+                    .attr("key", element.key)
+                    .attr("searchID", element.id)
+                    .css("color", color)
+                    //.attr("title", "Zapisz jako domyślne miejsce wyświetlania pogody")
+                    .on("click", function (event) {
+                        event.stopPropagation();
+                        setCookie("defaultCity", this.attributes.key.value + "&" + element.name, 1000, 2, 2, 1);
+                        $("#snackbar").html("Zapisano domyślne miejsce").attr("class", "show");
+                        getLastSearchAjax(userID)
+                        setTimeout(function () { $("#snackbar").attr("class", ""); }, 3000);
+                    });
+                var popup = $("<div>")
+                    .attr("class", "popup")
+                    .append(icon)
+                    .append('<span class= "popupText">Zapisz jako domyślne miejsce wyświetlania pogody</span >');
+                div.append(popup);
                 ul.append(div);
             });
             $("#content")

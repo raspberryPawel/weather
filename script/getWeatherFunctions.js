@@ -1,11 +1,12 @@
 
+
 //number is from the Accuweather Api images 
 function getNightImage(nightState, nightImage, nightImage2, animationNight) {
     if (nightState >= 33 && nightState <= 34) {
         nightImage = "blood.png";
     }
     if (nightState >= 35 && nightState <= 37) {
-        nightImage2 = "mooncloud.png";
+        nightImage2 = "suncloud.png";
     }
     if (nightState == 38) {
         nightImage2 = "cloud.png";
@@ -37,7 +38,7 @@ function getDayImage(dayState, dayImage2, nightState, nightImage2, dayImage, ani
     }
     if (nightState >= 4 && nightState <= 5 || nightState >= 20 && nightState <= 21 || nightState == 32) {
         animationTimeN = 40;
-        nightImage2 = "mooncloud.png";
+        nightImage2 = "suncloud.png";
     }
     if (dayState >= 6 && dayState <= 8) {
         dayImage2 = "cloud.png";

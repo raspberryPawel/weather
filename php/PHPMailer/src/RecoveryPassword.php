@@ -58,7 +58,7 @@ if (isset($_POST['name'], $_POST['email'])) {
                 if ($mail->Send()) {
                     echo 'yup';
                 } else {
-                    echo ("no");
+                    echo $mail->ErrorInfo;
                 }
                 $mail->ClearAddresses();
                 $mail->ClearAttachments();

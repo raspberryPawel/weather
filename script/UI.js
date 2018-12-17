@@ -19,29 +19,38 @@ $(document).ready(function () {
 
     //show user register panel
     $("#register").on("click", function () {
-        $("#registerForm").animate({ right: "0%" }, 1000);
+        $("#registerForm").css("display", "flex").animate({ width: "100%" }, 1000);
         click = show_Menu(click);
     });
     //hide user register panel
     $("#registerCancel").on("click", function () {
-        $("#registerForm").animate({ right: "-120%" }, 500);
+        $("#registerForm").animate({ width: "0" }, 500);
+        setTimeout(function () {
+            $("#registerForm").css("display", "none");
+        }, 500);
     });
 
     //show user login panel
     $("#sigIn").on("click", function () {
-        $("#login").animate({ right: "0%" }, 1000);
+        $("#login").css("display", "flex").animate({ width: "100%" }, 1000);
         click = show_Menu(click);
     });
     //hide user login panel
     $("#loginCancel").on("click", function () {
-        $("#login").animate({ right: "-120%" }, 500);
+        $("#login").animate({ width: "0" }, 500);
+        setTimeout(function () {
+            $("#login").css("display", "none");
+        }, 500);
     });
 
     //user logout
     $("#logout").on("click", function () {
         deleteCookie('userName');
         //$("#login").css("transition", "2s").css("top", "-1000%");
-        $("#login").animate({ right: "-120%" }, 500);
+        $("#login").animate({ width: "0" }, 500);
+        setTimeout(function () {
+            $("#login").css("display", "none");
+        }, 500);
         click = show_Menu(click);
     });
 
@@ -56,36 +65,46 @@ $(document).ready(function () {
 
     //show user admin page
     $("#account").on("click", function () {
-        $("#adminPage").animate({ right: "0px" }, 1000);
+        $("#adminPage").css("display", "flex").animate({ width: "100%" }, 1000);
         click = show_Menu(click);
     });
     //hide user admin page
     $("#adminPageCancel").on("click", function () {
-        $("#adminPage").animate({ right: "-120%" }, 500);
+        $("#adminPage").animate({ width: "0" }, 500);
+        setTimeout(function () {
+            $("#adminPage").css("display", "none");
+        }, 500);
     });
 
     //show password recovery panel
     $("#forgotPassword").on("click", function () {
-        $("#forgotPasswordPanel").animate({ right: "0px" }, 1000);
+        $("#forgotPasswordPanel").css("display", "flex").animate({ width: "100%" }, 1000);
     });
     //hide password recovery panel
     $("#recoveryPasswordCancel").on("click", function () {
-        $("#forgotPasswordPanel").animate({ right: "-120%" }, 1000);
+        $("#forgotPasswordPanel").animate({ width: "0" }, 500);
+        setTimeout(function () {
+            $("#forgotPasswordPanel").css("display", "none");
+        }, 500);
     });
 
     //show contact panel
     $(".contactForm").on("click", function () {
         click = show_Menu(click);
+        $("#contact").css("display", "flex");
         $("#contact").css("z-index", "199");
         $("#contact").animate({ opacity: "1" }, 1000);
         $("#contact").animate({ right: "0px" }, 1000);
     });
     //hide contact panel
     $("#contactCancel").on("click", function () {
-        $("#contact").animate({ right: "-300%" }, 1000);
+        $("#contact").animate({ right: "-500%" }, 1000);
         $("#contact").animate({ opacity: "0" }, 1000);
         setTimeout(function () {
             $("#contact").css("z-index", "-1");
+            setTimeout(function () {
+                $("#contact").css("display", "none");
+            }, 1000);
         }, 1000);
     });
 
@@ -144,6 +163,8 @@ function mapDesignClick() {
                         checkbox[i].checked = false;
                     }
                     setCookie("mapStyle", this.attributes.mapName.value, 1000, 2, 2, 1);
+                    $("#snackbar").html("Zmieniono design mapy").attr("class", "show");
+                    setTimeout(function () { $("#snackbar").attr("class", ""); }, 3000);
                     this.checked = true;
                     initMap("52.232", "21.007", 5, "map", window[this.attributes.mapName.value], true, 1);
                 });
@@ -178,6 +199,8 @@ function designGooglePinsClick() {
                         checkbox[i].checked = false;
                     }
                     setCookie("pinName", this.attributes.pinsName.value, 1000, 2, 2, 1);
+                    $("#snackbar").html("Zmieniono design pinezki").attr("class", "show");
+                    setTimeout(function () { $("#snackbar").attr("class", ""); }, 3000);
                     this.checked = true;
                     initMap("52.232", "21.007", 5, "map", mapStyleName, true, 1);
                 });

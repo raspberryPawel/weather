@@ -1,14 +1,17 @@
 #login, #registerForm, #forgotPasswordPanel {
-    width: 100%;
+    width: 0px;
     height: 100vh;
     position: absolute;
     top: 0;
-    right: -120%;
+    right: 0%;
     background-color: rgba(0, 0, 0, 0.8);
     z-index: 99;
-    display: flex;
+    /* display: flex; */
     justify-content: center;
     flex-direction: column;
+    display: none;
+    /* display: none;
+    zmiana rdw */
 }
 
 .Login .formControl {
