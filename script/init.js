@@ -21,8 +21,6 @@ $(document).ready(function () {
         searchFocusClick(toSearch)
     });
 
-console.log("cos");
-
     var cityId = getCookie('defaultCity');
     if (cityId != null && cityId != "") {
         getWeatherFromKey(cityId.split("%26")[0])
@@ -118,24 +116,26 @@ function createWeatherContainer() {
     var hide = $("<div>")
         .attr("id", "hideWeather")
         .html("Ukryj pogodę <i class='fas fa-arrow-down'></i>")
-        .on("click", function () {
-            if ($("#hideWeather")[0].innerHTML == 'Ukryj pogodę <i class="fas fa-arrow-down"></i>') {
-                $("#weatherInfo")
-                    .css("transition", "1s")
-                    .css("top", "120%");
-                $("#hideWeather")
-                    .html('Pokaż pogodę <i class="fas fa-arrow-up"></i>');
-            }
-            else {
-                $("#weatherInfo")
-                    .css("transition", "1s")
-                    .css("top", "12vh");
-                $("#hideWeather")
-                    .html("Ukryj pogodę <i class='fas fa-arrow-down'></i>");
-            }
-        });
+        .on("click", hideWeather);
     div.append(hide);
     $("#map").append(div);
+}
+
+function hideWeather() {
+    if ($("#hideWeather")[0].innerHTML == 'Ukryj pogodę <i class="fas fa-arrow-down"></i>') {
+        $("#weatherInfo")
+            .css("transition", "1s")
+            .css("top", "120%");
+        $("#hideWeather")
+            .html('Pokaż pogodę <i class="fas fa-arrow-up"></i>');
+    }
+    else {
+        $("#weatherInfo")
+            .css("transition", "1s")
+            .css("top", "12vh");
+        $("#hideWeather")
+            .html("Ukryj pogodę <i class='fas fa-arrow-down'></i>");
+    }
 }
 
 function repleacePolishLetters(toSearch) {
@@ -182,7 +182,7 @@ function getLocation() {
                 setTimeout(function () {
                     $("#positionInfo").css("display", "none");
                 }, 1000);
-            }, 1500);
+            }, 5000);
         }, 15000);
     } else {
         $("#posInfo")
@@ -209,7 +209,7 @@ function savePosition(lat, lon) {
             success: function (data) {
                 var obj = JSON.parse(JSON.parse(data));
                 if (obj == true) {
-                    $("#positionInfo").animate({ right: "-300%" }, 1000);
+                    $("#positionInfo").animate({ width: 0 }, 1000);
                 }
                 else {
                     console.log("wystąpił nieoczekiwany błąd z bazą danych");
@@ -221,7 +221,7 @@ function savePosition(lat, lon) {
         });
     }
     else {
-        $("#login").animate({ right: "0%" }, 1000);
+        $("#login").animate({ width: "100%" }, 1000);
     }
 
 }
@@ -247,22 +247,24 @@ function getPositionFromLatLon(newSearch) {
                     .css("opacity", "0");
                 $("#positionInfo h1")
                     .html("Wyczerpano liczbę użyć  klucza API");
-                $("#positionInfo").animate({ right: "0%" }, 500);
+                $("#positionInfo").animate({ width: "100%" }, 500);
             }
             else if (obj.Message == "Api Authorization failed") {
                 $("#positionInfo div")
                     .css("opacity", "0");
                 $("#positionInfo h1")
                     .html("Api Authorization failed");
-                $("#positionInfo").animate({ right: "0%" }, 500);
+                $("#positionInfo").animate({ width: "100%" }, 500);
             }
             else {
                 $("#search").val(obj.LocalizedName);
                 initMap(obj.GeoPosition.Latitude, obj.GeoPosition.Longitude, 13, "map", mapStyleName, true, 1);
                 createWeatherContainer();
+                Settings.curentLat = obj.GeoPosition.Latitude;
+                Settings.curentLan = obj.GeoPosition.Longitude;
                 getWeather(obj.Key);
                 lastSearch(obj.LocalizedName, obj.Key)
-                $("#positionInfo").animate({ right: "-300%" }, 1000);
+                $("#positionInfo").animate({ width: "0%" }, 1000);
             }
         },
         error: function (xhr, status, error) {
@@ -278,15 +280,33 @@ function getWeatherFromKey(toSearch) {
         type: "POST",
         success: function (data) {
             var obj = JSON.parse(JSON.parse(data));
-            $("#search").val(obj.LocalizedName);
-            $("#searchAutoComplete").empty();
-            initMap(obj.GeoPosition.Latitude, obj.GeoPosition.Longitude, 13, "map", mapStyleName, true, 1);
-            createWeatherContainer();
-            getWeather(toSearch);
-            $("#adminPage").animate({ width: "0%" }, 500);
-            setTimeout(function () {
-                $("#adminPage").css("display", "none");
-            }, 500);
+            if (obj.Message == "The allowed number of requests has been exceeded.") {
+                $("#positionInfo div")
+                    .css("opacity", "0");
+                $("#positionInfo h1")
+                    .html("Wyczerpano liczbę użyć  klucza API");
+                $("#positionInfo").animate({ width: 0 }, 500);
+            }
+            else if (obj.Message == "Api Authorization failed") {
+                $("#positionInfo div")
+                    .css("opacity", "0");
+                $("#positionInfo h1")
+                    .html("Api Authorization failed");
+                $("#positionInfo").animate({ width: 0 }, 500);
+            }
+            else {
+                $("#search").val(obj.LocalizedName);
+                $("#searchAutoComplete").empty();
+                initMap(obj.GeoPosition.Latitude, obj.GeoPosition.Longitude, 13, "map", mapStyleName, true, 1);
+                Settings.curentLat = obj.GeoPosition.Latitude;
+                Settings.curentLan = obj.GeoPosition.Longitude;
+                createWeatherContainer();
+                getWeather(toSearch);
+                $("#adminPage").animate({ width: "0%" }, 500);
+                setTimeout(function () {
+                    $("#adminPage").css("display", "none");
+                }, 500);
+            }
         },
         error: function (xhr, status, error) {
             //console.log(xhr);
@@ -301,11 +321,11 @@ function lastSearch(city, toSearch) {
         data: { search: toSearch, city: city, userID: id },
         type: "POST",
         success: function (data) {
-            var obj = JSON.parse(JSON.parse(data));
-            $("#searchAutoComplete").empty();
-            initMap(obj.GeoPosition.Latitude, obj.GeoPosition.Longitude, 13, "map", mapStyleName, true, 1);
-            createWeatherContainer();
-            getWeather(toSearch);
+            // var obj = JSON.parse(JSON.parse(data));
+            // $("#searchAutoComplete").empty();
+            // initMap(obj.GeoPosition.Latitude, obj.GeoPosition.Longitude, 13, "map", mapStyleName, true, 1);
+            // createWeatherContainer();
+            // getWeather(toSearch);
         },
         error: function (xhr, status, error) {
             //console.log(xhr);

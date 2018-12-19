@@ -24,9 +24,9 @@
     height: 100vh;
     position: fixed;
     top: 0;
-    left: 0;
+    left: -300px;
     z-index: 9999;
-    padding: 2%;
+    padding: 1% 1% 1% 0%;
 }
 
 #dismiss {
@@ -41,7 +41,7 @@
 }
 
 #show {
-    position: absolute;
+    position: fixed;
     top: 1%;
     left: 1%;
     font-size: 200%;
@@ -175,8 +175,8 @@
 
 #snackbar.show {
     visibility: visible;
-    -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
-    animation: fadein 0.5s, fadeout 0.5s 2.5s;
+    -webkit-animation: fadein 0.8s, fadeout 0.8s 3;
+    animation: fadein 0.8s, fadeout 0.8s 3s;
 }
 
 /* popup tooltip */
@@ -190,7 +190,7 @@
 
 .popup .popupText {
     visibility: hidden;
-    width: 135px;
+    width: 145px;
     background-color: #2b2b2b;
     color: #fff;
     text-align: center;
@@ -198,8 +198,8 @@
     padding: 5px 0;
     position: absolute;
     z-index: 1;
-    bottom: 125%;
-    left: 50%;
+    top: -15px;
+    right: 150%;
     margin-left: -60px;
     opacity: 0;
     transition: opacity 0.3s;
@@ -210,12 +210,12 @@
 .popup .popupText::after {
     content: "";
     position: absolute;
-    top: 100%;
-    left: 50%;
-    margin-left: -5px;
+    top: 50%;
+    left: 100%;
+    margin-top: -5px;
     border-width: 5px;
     border-style: solid;
-    border-color: #555 transparent transparent transparent;
+    border-color: transparent transparent transparent black;
 }
 
 .popup:hover .popupText {
@@ -265,4 +265,79 @@
         bottom: 0;
         opacity: 0;
     }
+}
+
+/* custom checkbox */
+
+/* Hide the browser's default checkbox */
+
+.pinsContainer input, .mapContainer input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 17px;
+    width: 17px;
+    z-index: 99;
+    right: 0;
+}
+
+/* Create a custom checkbox */
+
+.checkmark {
+    position: absolute;
+    top: 0;
+    right: 0;
+    height: 17px;
+    width: 17px;
+    background-color: #eee;
+}
+
+/* On mouse-over, add a grey background color */
+
+.pinsContainer:hover input~.checkmark, .mapContainer:hover input~.checkmark {
+    background-color: #ccc;
+}
+
+/* When the checkbox is checked, add a blue background */
+
+.pinsContainer input:checked~.checkmark, .mapContainer input:checked~.checkmark {
+    background-color: #2b2b2b;
+}
+
+/* Create the checkmark/indicator (hidden when not checked) */
+
+.checkmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+}
+
+/* Show the checkmark when checked */
+
+.pinsContainer input:checked~.checkmark:after, .mapContainer input:checked~.checkmark:after {
+    display: block;
+}
+
+/* Style the checkmark/indicator */
+
+.pinsContainer .checkmark:after, .mapContainer .checkmark:after {
+    left: 6px;
+    top: 3.5px;
+    width: 5px;
+    height: 10px;
+    border: solid white;
+    border-width: 0 3px 3px 0;
+    -webkit-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    transform: rotate(45deg);
+}
+
+.mapContainer input, .mapContainer span {
+    transform: scale(2.5);
+    top: 13px;
+    right: 13px;
+}
+
+#loc .popupText, #save .popupText{
+    font-size: 57%;
 }

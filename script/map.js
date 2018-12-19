@@ -1,7 +1,6 @@
 function initMap(latitude, longitude, zoomVal, id, mapStyle, controlMap, positionObject) {
     var pinName = getCookie('pinName');
     var myLatLng = new google.maps.LatLng(parseFloat(latitude), parseFloat(longitude));
-    console.log("inicjuje mapę");
     // Create a map object and specify the DOM element
     // for display.
     var map = new google.maps.Map(document.getElementById(id), {
@@ -15,7 +14,7 @@ function initMap(latitude, longitude, zoomVal, id, mapStyle, controlMap, positio
         var marker = new google.maps.Marker({
             map: map,
             position: myLatLng,
-            title: 'Hello World!',
+            title: 'Hello!',
             icon: 'images/GooglePins/'+pinName+'.png' // null = default icon
         });
     }

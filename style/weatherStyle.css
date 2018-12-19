@@ -172,7 +172,7 @@
 
 #weatherInfo::-webkit-scrollbar {
     width: 12px;
-    background-color: #F5F5F5;
+    background-color: rgba(0, 0, 0, 0);
 }
 
 #weatherInfo::-webkit-scrollbar-thumb {

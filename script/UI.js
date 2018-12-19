@@ -65,11 +65,16 @@ $(document).ready(function () {
 
     //show user admin page
     $("#account").on("click", function () {
+        var id = getCookie('userID');
+        if ($("#content").html() == "") {
+            getLastSearchAjax(id);
+        }
         $("#adminPage").css("display", "flex").animate({ width: "100%" }, 1000);
         click = show_Menu(click);
     });
     //hide user admin page
     $("#adminPageCancel").on("click", function () {
+        $("#adminPage nav").animate({ left: "-300px" }, 20);
         $("#adminPage").animate({ width: "0" }, 500);
         setTimeout(function () {
             $("#adminPage").css("display", "none");
@@ -144,7 +149,12 @@ function mapDesignClick() {
         $("#content")
             .empty()
             .html("<h1>Design mapy:</h1>");
+        var selectedMap = getCookie('mapStyle');
         Settings.stylesTab.forEach(element => {
+            if (selectedMap != null && selectedMap != "" && selectedMap == element.styleName)
+                var selected = true;
+            else
+                var selected = false;
             var container = $("<div>")
                 .attr("class", "mapContainer")
                 .attr("mapName", element.styleName);
@@ -156,6 +166,7 @@ function mapDesignClick() {
             var input = $("<input>")
                 .attr("class", "styleCheckbox")
                 .attr("type", "checkbox")
+                .attr("checked", selected)
                 .attr("mapName", element.styleName)
                 .on("click", function () {
                     var checkbox = $(".styleCheckbox");
@@ -166,11 +177,22 @@ function mapDesignClick() {
                     $("#snackbar").html("Zmieniono design mapy").attr("class", "show");
                     setTimeout(function () { $("#snackbar").attr("class", ""); }, 3000);
                     this.checked = true;
-                    initMap("52.232", "21.007", 5, "map", window[this.attributes.mapName.value], true, 1);
+                    var weather = $("#weatherInfo").html();
+                    if (weather != "" && weather != null) {
+                        initMap(Settings.curentLat, Settings.curentLan, 13, "map", window[this.attributes.mapName.value], true, 1);
+                        createWeatherContainer();
+                        $("#weatherInfo").html(weather);
+                        $("#hideWeather")
+                            .html("Ukryj pogodę <i class='fas fa-arrow-down'></i>")
+                            .on("click", hideWeather);
+                    }
+                    else
+                        initMap("52.232", "21.007", 5, "map", window[this.attributes.mapName.value], true, 1);
                 });
             container
                 .append(h1)
                 .append(input)
+                .append('<span class="checkmark"></span>')
                 .append(map);
             $("#content")
                 .append(container);
@@ -185,15 +207,22 @@ function designGooglePinsClick() {
         $("#content")
             .empty()
             .html("<h1>Design pinezki:</h1>");
+        var selectedPin = getCookie('pinName');
         Settings.pinsTab.forEach(element => {
+            if (selectedPin != null && selectedPin != "" && selectedPin == element)
+                var selected = true;
+            else
+                var selected = false;
             var container = $("<div>")
                 .attr("class", "pinsContainer")
                 .css("background-image", "url(images/GooglePinsBig/" + element + ".png)");
             var input = $("<input>")
                 .attr("class", "styleCheckbox")
                 .attr("pinsName", element)
+                .attr("checked", selected)
                 .attr("type", "checkbox")
                 .on("click", function () {
+                    getCookieMapStyle();
                     var checkbox = $(".styleCheckbox");
                     for (var i = 0; i < checkbox.length; i++) {
                         checkbox[i].checked = false;
@@ -202,9 +231,19 @@ function designGooglePinsClick() {
                     $("#snackbar").html("Zmieniono design pinezki").attr("class", "show");
                     setTimeout(function () { $("#snackbar").attr("class", ""); }, 3000);
                     this.checked = true;
-                    initMap("52.232", "21.007", 5, "map", mapStyleName, true, 1);
+                    var weather = $("#weatherInfo").html();
+                    if (weather != "" && weather != null) {
+                        initMap(Settings.curentLat, Settings.curentLan, 13, "map", mapStyleName, true, 1);
+                        createWeatherContainer();
+                        $("#weatherInfo").html(weather);
+                        $("#hideWeather")
+                            .html("Ukryj pogodę <i class='fas fa-arrow-down'></i>")
+                            .on("click", hideWeather);
+                    }
+                    else
+                        initMap("52.232", "21.007", 5, "map", mapStyleName, true, 1);
                 });
-            container.append(input);
+            container.append(input).append('<span class="checkmark"></span>');
             $("#content")
                 .append(container);
         });

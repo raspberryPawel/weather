@@ -18,6 +18,17 @@ var Settings = {
         { styleName: "redMapStyle", name: redMapStyle, visibleName: "Red Map", id: "mapRed" },
         { styleName: "lightMonochromeMapStyle", name: lightMonochromeMapStyle, visibleName: "Light Monochrome Bluish", id: "mapLightMonochrome" },
         { styleName: "lightGreenMapStyle", name: lightGreenMapStyle, visibleName: "Light Green", id: "mapGreen" },
+        { styleName: "lightDreamMapStyle", name: lightDreamMapStyle, visibleName: "Light Dream", id: "mapDream" },
+        { styleName: "MidnightMapStyle", name: MidnightMapStyle, visibleName: "Midnight Commander", id: "mapMidnight" },
+        { styleName: "NeutralMapStyle", name: NeutralMapStyle, visibleName: "Neutral Blue", id: "mapNeutral" },
+        { styleName: "LunarMapStyle", name: LunarMapStyle, visibleName: "Lunar Landscape", id: "mapLunar" },
+        { styleName: "HuesMapStyle", name: HuesMapStyle, visibleName: "Red Hues", id: "mapHues" },
+        { styleName: "RedDarknessMapStyle", name: RedDarknessMapStyle, visibleName: "Red Darkness", id: "mapDarkness" },
+        { styleName: "CaptorMapStyle", name: CaptorMapStyle, visibleName: "Captor", id: "mapCaptor" },
+        { styleName: "papuportalMapStyle", name: papuportalMapStyle, visibleName: "Papuportal", id: "mapPapu" },
+        { styleName: "DarkYellowMapStyle", name: DarkYellowMapStyle, visibleName: "Dark Yellow", id: "mapDarkYellow" },
+        { styleName: "CLRMapStyle", name: CLRMapStyle, visibleName: "CLR Map", id: "mapCLT" },
+        { styleName: "MonochromeTerrainMapStyle", name: MonochromeTerrainMapStyle, visibleName: "Monochrome terrain", id: "mapTerrain" },
     ],
     //google pins array/ image names
     pinsTab: [
@@ -35,4 +46,6 @@ var Settings = {
         "pin11",
         "pin12",
     ],
+    curentLat: null,
+    curentLan: null,
 }
