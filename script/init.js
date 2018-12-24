@@ -1,26 +1,28 @@
 var mapStyleName = grayMapStyle;
 $(document).ready(function () {
+    // get skins for google maps
     getCookieMapStyle();
+    // get location and search weather
     $("#loc").on("click", function () {
         Settings.control = true;
         getLocation();
     });
-
+    // save location and show on map in account page
     $("#save").on("click", function () {
         Settings.control = false;
         getLocation();
     });
-
+    // search in search box | show city prompt
     $("#search").on("input", function () {
         let toSearch = this.value;
         searchFocusClick(toSearch)
     });
-
+    // search in search box | show city prompt
     $("#search").on("click", function () {
         let toSearch = this.value;
         searchFocusClick(toSearch)
     });
-
+    // show default city weather or init clear map
     var cityId = getCookie('defaultCity');
     if (cityId != null && cityId != "") {
         getWeatherFromKey(cityId.split("%26")[0])
@@ -30,6 +32,7 @@ $(document).ready(function () {
     }
 
 });
+//click city option in prompt box
 function optionClick() {
     getCookieMapStyle();
     $("#searchAutoComplete")
@@ -44,7 +47,6 @@ function optionClick() {
 }
 
 function searchFocusClick(toSearch) {
-
     $("#searchAutoComplete")
         .empty()
         .css("height", "0px")
@@ -99,7 +101,7 @@ function searchFocusClick(toSearch) {
     });
 
 }
-
+// get skins name for google map from cookie
 function getCookieMapStyle() {
     var x = getCookie('mapStyle');
     if (x != null && x != "") {
@@ -109,7 +111,7 @@ function getCookieMapStyle() {
         mapStyleName = grayMapStyle;
     }
 }
-
+// create div for weather
 function createWeatherContainer() {
     var div = $("<div>")
         .attr("id", "weatherInfo");
@@ -120,7 +122,7 @@ function createWeatherContainer() {
     div.append(hide);
     $("#map").append(div);
 }
-
+// hide weather div
 function hideWeather() {
     if ($("#hideWeather")[0].innerHTML == 'Ukryj pogodę <i class="fas fa-arrow-down"></i>') {
         $("#weatherInfo")
@@ -137,7 +139,7 @@ function hideWeather() {
             .html("Ukryj pogodę <i class='fas fa-arrow-down'></i>");
     }
 }
-
+//repleace polish letters for UTF8 
 function repleacePolishLetters(toSearch) {
     let sign = Settings.sign;
     let signUTF = Settings.signUTF;
@@ -158,11 +160,10 @@ function repleacePolishLetters(toSearch) {
             newSearch += toSearch[i];
     }
     newSearch.replace(/\+/g, '');
-    //console.log(newSearch, " <=====to to ");
     return newSearch;
 }
 
-
+//get location cords
 function getLocation() {
     $("#positionInfo div")
         .css("opacity", "1");
@@ -198,7 +199,7 @@ function getLocation() {
         });
     }
 }
-
+//savve position in map
 function savePosition(lat, lon) {
     var id = getCookie('userID');
     if (id != null && id != '') {
@@ -212,7 +213,7 @@ function savePosition(lat, lon) {
                     $("#positionInfo").animate({ width: 0 }, 1000);
                 }
                 else {
-                    console.log("wystąpił nieoczekiwany błąd z bazą danych");
+                    // console.log("wystąpił nieoczekiwany błąd z bazą danych");
                 }
             },
             error: function (xhr, status, error) {
@@ -272,7 +273,7 @@ function getPositionFromLatLon(newSearch) {
         },
     });
 }
-
+// get weather from city key in accuweather api
 function getWeatherFromKey(toSearch) {
     $.ajax({
         url: "php/getLocation.php",
