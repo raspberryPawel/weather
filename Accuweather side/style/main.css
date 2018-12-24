@@ -1,0 +1,88 @@
+body {
+    padding: 0;
+    margin: 0;
+    background: #414141;
+    overflow: hidden;
+}
+
+#map {
+    position: absolute !important;
+    overflow: hidden;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+}
+
+.container {
+    padding-top: 19px;
+}
+
+@media only screen and (max-width: 600px) {
+    #weatherInfo {
+        align-content: space-between;
+    }
+}
+
+@media only screen and (max-height: 500px) {
+    #weatherInfo {
+        align-content: space-between;
+    }
+}
+
+.gmnoprint, .gm-style-cc, .gm-control-active, .gm-fullscreen-control {
+    display: none !important;
+}
+
+#positionInfo {
+    width: 0px;
+    height: 100vh;
+    top: 0;
+    right: 0%;
+    position: absolute;
+    color: white;
+    background-color: rgba(0, 0, 0, 0.9);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    z-index: 200;
+    display: flex;
+    font-family: 'Lato', sans-serif !important;
+    display: none;
+    /* display: none;
+    zmiana! */
+}
+
+#positionInfo h1 {
+    font-size: 135%;
+    height: 46%;
+    justify-self: flex-start;
+    padding: 2%;
+    letter-spacing: 2.5px;
+}
+
+#positionInfo div {
+    width: 100%;
+    text-align: center;
+}
+
+#positionInfo i {
+    font-size: 400%;
+    color: white;
+    width: auto;
+    height: auto;
+    justify-self: center;
+    align-self: center;
+    animation: spin 1s infinite;
+    animation-timing-function: ease;
+    animation-timing-function: linear;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}

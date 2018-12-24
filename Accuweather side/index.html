@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="pl">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta name="author" content="Paweł Malina" />
+  <title>AccuWather</title>
+  <!-- style -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+    crossorigin="anonymous">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <link rel="stylesheet" href="/maps/documentation/javascript/cgc/demos.css">
+  <link rel="stylesheet" href="style/main.css">
+  <link rel="stylesheet" href="style/searchStyle.css">
+  <link rel="stylesheet" href="style/loginForm.css">
+  <link rel="stylesheet" href="style/navStyle.css">
+  <link rel="stylesheet" href="style/adminPage.css">
+  <link rel="stylesheet" href="style/weatherStyle.css">
+  <link rel="stylesheet" href="style/contact.css">
+  <link rel="stylesheet" href="style/rwd.css">
+  <!-- Scrollbar Custom CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/malihu-custom-scrollbar-plugin/3.1.5/jquery.mCustomScrollbar.min.css">
+  <!-- script -->
+  <script src="script/jquery.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDaZwpc5qZXFmbTwGjjy41i-FuggEaJHF4&callback=initMap"
+    async defer></script>
+  <script src="script/mapStyle.js"></script>
+  <script src="script/map.js"></script>
+  <script src="script/getWeather.js"></script>
+  <script src="script/getWeatherFunctions.js"></script>
+  <script src="script/Net.js"></script>
+  <script src="script/init.js"></script>
+  <script src="script/UI.js"></script>
+  <script src="script/Settings.js"></script>
+  <!-- font -->
+  <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Lato" rel="stylesheet">
+  <!-- icons -->
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU"
+    crossorigin="anonymous">
+</head>
+
+<body>
+  <div class="container">
+    <div class="row">
+      <div class="col-xl-2 col-lg-2 col-md-1 col-sm-12 d-flex justify-content-center">
+      </div>
+      <div class="col-xl-8 col-lg-8 col-md-10 col-sm-12 d-flex justify-content-center">
+        <input type="text" placeholder="Wpisz cokolwiek aby wyszukać.." id="search">
+        <div id="loc" class="popup"><i class="fas fa-map-marker-alt"></i>
+          <span class="popupText">Znajdź swoją lokalizację</span> </div>
+        <div id="save" class="popup"> <i class="fas fa-bookmark"></i>
+          <span class="popupText">Zapisz lokalizację na mapie odwiedzonych miejsc!</span></div>
+      </div>
+      <div class="col-xl-2 col-lg-2 col-md-1 col-sm-12 d-flex justify-content-center">
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-xl-2 col-lg-2 col-md-1 col-sm-12 d-flex justify-content-center">
+      </div>
+      <div class="col-xl-8 col-lg-8 col-md-10 col-sm-12 d-flex justify-content-center">
+        <div id="searchAutoComplete" class="d-flex flex-column justify-content-center">
+
+        </div>
+      </div>
+      <div class="col-xl-2 col-lg-2 col-md-1 col-sm-12 d-flex justify-content-center">
+      </div>
+    </div>
+  </div>
+  <div id="map">
+  </div>
+  <nav>
+    <div id="menu-button">
+      <i class="fas fa-bars" style="display: block;"></i>
+      <i class="fas fa-times" style="display: none;"></i>
+    </div>
+    <ul id="offline">
+      <li>
+        <div id="sigIn">Zaloguj</div>
+      </li>
+      <li>
+        <div id="register">Zarejestruj</div>
+      </li>
+      <li>
+        <div class="contactForm">Kontakt</div>
+      </li>
+    </ul>
+    <ul id="online">
+      <li>
+        <div id="account">Konto</a>
+      </li>
+      <li>
+        <div id="logout">Wyloguj</a>
+      </li>
+      <li>
+        <div class="contactForm">Kontakt</a>
+      </li>
+    </ul>
+  </nav>
+  <div id="login">
+    <i id="loginCancel" class="fas fa-times" style="display: block;"></i>
+    <div class="container">
+      <div class="Login">
+        <div class="formGroup">
+          <i class="fas fa-user"></i><input type="email" class="formControl" id="inputEmail" placeholder="Adres Email">
+        </div>
+        <div class="formGroup">
+          <i class="fas fa-lock"></i><input type="password" class="formControl" id="inputPassword" placeholder="Hasło">
+        </div>
+        <div class="forgot">
+          <div id="forgotPassword">Forgot password?</div>
+        </div>
+        <button type="submit" id="loginSubmit" class="btn btn-primary">Zaloguj</button>
+        <div id="loginInfo" style="text-align: center; padding: 10px;"></div>
+      </div>
+    </div>
+  </div>
+
+  <div id="registerForm">
+    <i id="registerCancel" class="fas fa-times" style="display: block;"></i>
+    <div class="container">
+      <div class="Login">
+        <div class="formGroup">
+          <input type="Text" id="registerName" class="formControl" placeholder="Imie i Nazwisko">
+        </div>
+        <div class="formGroup">
+          <input type="email" id="registerEmail" class="formControl" placeholder="Adres Email" title="Adres email jest nieprawidłowy">
+        </div>
+        <div class="formGroup">
+          <input type="password" id="registerPassword" class="formControl" pattern="(.{3}).+" data-toggle="tooltip"
+            title="Hasło powinno zawierać więcej niż 3 litery" placeholder="Hasło">
+        </div>
+        <div class="formGroup">
+          <input type="password" id="registerPasswordRepeat" class="formControl" pattern="(.{3}).+" data-toggle="tooltip"
+            title="Hasło powinno zawierać więcej niż 3 litery" placeholder="Powtorz hasło">
+        </div>
+        <button type="submit" id="registerSubmit" class="btn btn-primary">Zarejestruj</button>
+        <div id="info" style="text-align: center; padding: 10px;"></div>
+      </div>
+    </div>
+  </div>
+
+  <div id="adminPage" class="wrapper">
+    <i id="adminPageCancel" class="fas fa-times" style="display: block;"></i>
+    <!-- Sidebar -->
+    <nav id="sidebar">
+      <div id="dismiss">
+        <i class="fas fa-arrow-left"></i>
+      </div>
+      <ul>
+        <li>
+          <div id="lastSearch">Ostatnie wyszukiwania <i class="fas fa-search-location"></i></div>
+        </li>
+        <li>
+          <div id="design">Wygląd mapy <i class="fas fa-map"></i></div>
+        </li>
+        <li>
+          <div id="pinDesign">Wygląd pinezki <i class="fas fa-map-pin"></i></div>
+        </li>
+        <li>
+          <div id="savePosition">Zapisane pozycje <i class="fas fa-globe-americas"></i></div>
+        </li>
+        <li>
+          <div id="userSettings">Ustawienia konta <i class="fas fa-cogs"></i></div>
+        </li>
+      </ul>
+    </nav>
+    <div id="show"><i class="fas fa-bars"></i></div>
+
+    <!-- Page Content -->
+    <div id="content"></div>
+  </div>
+
+  <div id="forgotPasswordPanel">
+    <i id="recoveryPasswordCancel" class="fas fa-times" style="display: block;"></i>
+    <div class="container">
+      <div class="Login">
+        <div class="formGroup">
+          <input type="email" class="formControl" id="recoveryInputEmail" placeholder="Adres Email">
+        </div>
+        <div class="formGroup">
+          <input type="text" class="formControl" id="recoveryInputName" placeholder="Imię i Nazwisko">
+        </div>
+        <button type="submit" id="recoverySubmit" class="btn btn-primary">Odzyskaj Hasło</button>
+        <div id="recoveryInfo" style="text-align: center; padding: 10px;"></div>
+      </div>
+    </div>
+  </div>
+
+  <div id="positionInfo">
+    <h1 id="posInfo">Określamy Twoją lokalizację</h1>
+    <div><i class="fas fa-spinner"></i></div>
+  </div>
+
+  <div id="contact">
+    <i id="contactCancel" class="fas fa-times" style="display: block;"></i>
+    <h1>Skontaktuj się ze mną</h1>
+    <h2>Każdy pomysł lub błąd, o którym wiesz, ma dla mnie ogromne znaczenie!</h2>
+    <i id="spiner" class="fas fa-spinner"></i>
+    <div id="form">
+      <div class="label">
+        <input id="contactName" type="text" placeholder="Imie i Nazwisko">
+      </div>
+      <div class="label">
+        <input id="contactEmail" type="email" placeholder="Adres E-mail">
+      </div>
+      <div class="label">
+        <input id="contactPhone" type="phone" placeholder="Telefon kontaktowy">
+      </div>
+      <div class="label">
+        <textarea name="Messagearea" id="contactMessagearea" cols="30" rows="10" placeholder="Wiadomość"></textarea>
+      </div>
+      <button id="send">Wyślij</button>
+      <div class="label">
+        <div id="infoContent"></div>
+      </div>
+    </div>
+  </div>
+  <div id="snackbar">Zapisano miejsce</div>
+</body>
+
+</html>
+
