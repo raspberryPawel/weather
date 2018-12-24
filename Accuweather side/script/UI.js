@@ -45,11 +45,6 @@ $(document).ready(function () {
 
     //user logout
     $("#logout").on("click", function () {
-        //deleteCookie('userName');
-        console.log("usuwam ciastko");
-        // setCookie('userName', "", null, null, null, 1);
-        // var name = 'userName';
-        // document.cookie = name + '=; expires=Thu, 01 Jan 1970 00:00:01 GMT;';
         document.cookie = "userName=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
         //$("#login").css("transition", "2s").css("top", "-1000%");
         $("#login").animate({ width: "0" }, 500);

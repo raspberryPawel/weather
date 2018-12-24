@@ -7,7 +7,7 @@ $(document).ready(function () {
         click = show_Menu(click);
         //get login cookie
         var x = getCookie('userName');
-        if (x == null) {
+        if (x == null || x == "") {
             $("#online").css("display", "none");
             $("#offline").css("display", "block");
         }
@@ -45,7 +45,7 @@ $(document).ready(function () {
 
     //user logout
     $("#logout").on("click", function () {
-        deleteCookie('userName');
+        document.cookie = "userName=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
         //$("#login").css("transition", "2s").css("top", "-1000%");
         $("#login").animate({ width: "0" }, 500);
         setTimeout(function () {

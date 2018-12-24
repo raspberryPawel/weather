@@ -61,7 +61,6 @@ function getDayImage(dayState, dayImage2, nightState, nightImage2, dayImage, ani
         dayImage = "thunder.png";
         dayImage2 = "rain1.png";
         animationDay = "snow";
-        console.log('kurwa burza');
     }
     if (dayState >= 22 && dayState <= 29 || dayState == 31 || dayState >= 43 && dayStates <= 44 || dayState == 19) {
         dayImage = "snow.png";
